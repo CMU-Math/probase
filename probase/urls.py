@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from database import views
+
 urlpatterns = [
+    path('home/', views.home, name='home'),
+    path('problem/<int:problem_id>/', views.problem_detail, name='problem_detail'),
+    path('new/', views.home, name='new_problem'),
     path('admin/', admin.site.urls),
 ]

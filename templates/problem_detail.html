@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>{{ problem.title }}</h1>
+  <p>Author: {{ problem.author }}</p>
+  <p>Problem Text: {{ problem.problem_text }}</p>
+  <p>Answer: {{ problem.answer }}</p>
+  <p>Solution: {{ problem.solution }}</p>
+{% endblock %}

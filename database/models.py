@@ -13,6 +13,9 @@ class Problem(models.Model):
     update_time = models.DateTimeField(null=True) # time of last update
     update_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="+") # user who last updated it
 
+    def __str__(self):
+        return self.title
+
 class QualityRating(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="qratings")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
@@ -31,3 +34,8 @@ class Comment(models.Model):
     creation_time = models.DateTimeField(auto_now_add=True) 
     update_time = models.DateTimeField(null=True) # time of last update
     update_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="+") # user who last updated it
+
+def full_name(self):
+    return self.first_name + " " + self.last_name
+
+User.add_to_class("__str__", full_name)
