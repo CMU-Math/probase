@@ -2,10 +2,13 @@
 
 {% block content %}
   <h1>CMIMC Problem Database</h1>
+
+  <a href="{% url 'new_problem' %}">New Problem</a>
+
   <h2>All Problems</h2>
 
   {% for problem in problem_list %}
     <h3><a href="{% url 'problem_detail' problem.id %}">{{ problem.title }}</a></h3>
-    <p>{{ problem.problem_text }}</p>
+    {{ problem.problem_text }}
   {% endfor %}
 {% endblock %}

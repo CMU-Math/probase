@@ -19,7 +19,7 @@ def new_problem(request):
             problem = form.save(commit=False)
             problem.author = User.objects.first() # temporary
             problem.save()
-            return redirect('home')
+            return redirect('problem_detail', problem_id=problem.id)
     else:
         form = NewProblemForm()
     return render(request, 'new_problem.html', {'form': form})
