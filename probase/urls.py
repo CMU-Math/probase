@@ -21,6 +21,6 @@ from database import views
 urlpatterns = [
     path('home/', views.home, name='home'),
     path('problem/<int:problem_id>/', views.problem_detail, name='problem_detail'),
-    path('new/', views.home, name='new_problem'),
+    path('new/', views.new_problem, name='new_problem'),
     path('admin/', admin.site.urls),
 ]
