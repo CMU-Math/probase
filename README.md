@@ -18,9 +18,10 @@ If you click the new problem link and try to submit a problem, you'll get an err
 1. Run `python manage.py createsuperuser`, and enter any username, email, and password.
 2. Go to [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/) and login with the account
 you just created.
-3. You should see the Django admin site. ![Django admin site](static/img/django-admin.png)
-Click on "Users", then select the account you just
-created, enter a first and last name, and save the changes.
+3. You should see the Django admin site:
+    ![Django admin site](static/img/django-admin.png)
+    
+    Click on "Users", then select the account you just created, enter a first and last name, and save the changes.
 4. Go back to the home page ([http://127.0.0.1:8000/home/](http://127.0.0.1:8000/home/)) and submit a new problem. It should create a problem detail page at [http://127.0.0.1:8000/problem/1/](http://127.0.0.1:8000/problem/1/) which shows the details of the new problem, and the author should be the name you entered.
 
 ![Problem detail page](static/img/problem-detail.png)
