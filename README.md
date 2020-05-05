@@ -25,3 +25,16 @@ you just created.
 4. Go back to the home page ([http://127.0.0.1:8000/home/](http://127.0.0.1:8000/home/)) and submit a new problem. It should create a problem detail page at [http://127.0.0.1:8000/problem/1/](http://127.0.0.1:8000/problem/1/) which shows the details of the new problem, and the author should be the name you entered.
 
     ![Problem detail page](static/img/problem-detail.png)
+
+### Tutorials
+For anyone new to either Python or Django, here are some tutorials.
+
+Python Tutorials:
+- [https://www.learnpython.org/](https://www.learnpython.org/)
+- [https://thepythonguru.com/](https://thepythonguru.com/)
+- [https://pythonbasics.org/](https://pythonbasics.org/)
+
+Django Tutorials:
+- [https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/](https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/)
+- [https://docs.djangoproject.com/en/3.0/intro/tutorial01/](https://docs.djangoproject.com/en/3.0/intro/tutorial01/)
+- [Django Documentation](https://docs.djangoproject.com/en/3.0/topics/)
