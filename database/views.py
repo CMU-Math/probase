@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django import forms
 from .models import Problem
 from .forms import NewProblemForm
@@ -17,7 +17,7 @@ def new_problem(request):
         form = NewProblemForm(request.POST)
         if form.is_valid():
             problem = form.save(commit=False)
-            problem.author = User.objects.first() # temporary
+            problem.author = get_user_model().objects.first() # temporary
             problem.save()
             return redirect('problem_detail', problem_id=problem.id)
     else:
