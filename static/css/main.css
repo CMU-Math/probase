@@ -1,0 +1,4 @@
+/* Django crispy forms: hide asterisk for required fields because all fields are required */
+.asteriskField {
+    display: none;
+}

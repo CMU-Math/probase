@@ -40,7 +40,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     username = None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField(_('email'), unique=True)
     first_name = models.CharField(_('first name'), max_length=150)
     last_name = models.CharField(_('last name'), max_length=150)
     is_writer = models.BooleanField('problem writer status', default=False, help_text='Designates whether the user can submit problems to the database')
