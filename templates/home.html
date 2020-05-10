@@ -1,14 +1,34 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>CMIMC Problem Database</h1>
+  <h1></h1>
 
   <a href="{% url 'new_problem' %}">New Problem</a>
 
   <h2>All Problems</h2>
 
-  {% for problem in problem_list %}
-    <h3><a href="{% url 'problem_detail' problem.id %}">{{ problem.title }}</a></h3>
-    {{ problem.problem_text }}
-  {% endfor %}
+<div class="row">
+  <div class="col-md-4">
+	Search
+  </div>
+
+  <div class="col-md-8">
+	<div class="card-deck-wrapper">
+
+	  {% for problem in problem_list %}
+	    <div class="card">
+		  <div class="card-body">
+			<h3 class="card-title">
+			  <a href="{% url 'problem_detail' problem.id %}" class="stretched-link title-link">
+				{{ problem.title }}
+			  </a>
+			</h3>
+			{{ problem.problem_text }}
+		  </div>
+		</div>
+	  {% endfor %}
+	</div>
+  </div>
+</div>
+
 {% endblock %}

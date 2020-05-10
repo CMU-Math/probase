@@ -23,9 +23,3 @@ class MyUserCreationForm(UserCreationForm):
             'password2',
             Submit('submit', 'Sign Up')
         )
-        '''
-            Row(
-                Column('first_name', css_class='form-group col-md-6 mb-0'),
-                Column('last_name', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),'''

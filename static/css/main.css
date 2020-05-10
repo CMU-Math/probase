@@ -2,3 +2,7 @@
 .asteriskField {
     display: none;
 }
+
+a.title-link {
+  color: black;
+}
