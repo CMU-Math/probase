@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1></h1>
 
-  <a href="{% url 'new_problem' %}">New Problem</a>
-
-  <h2>All Problems</h2>
+<div class="clearfix mb-3">
+  <h2 class="float-left">All Problems</h2>
+  <a href="{% url 'new_problem' %}" class="btn btn-primary btn-lg btn-round float-right">
+	  <i class="fas fa-plus"></i><span class="d-none d-sm-inline" style="margin-left: 0.7rem;">New Problem</span>
+  </a>
+</div>
 
 <div class="row">
   <div class="col-md-4">
@@ -14,15 +16,14 @@
 
   <div class="col-md-8">
 	<div class="card-deck-wrapper">
-
 	  {% for problem in problem_list %}
 	    <div class="card">
 		  <div class="card-body">
-			<h3 class="card-title">
+			<h4 class="card-title">
 			  <a href="{% url 'problem_detail' problem.id %}" class="stretched-link title-link">
 				{{ problem.title }}
 			  </a>
-			</h3>
+			</h4>
 			{{ problem.problem_text }}
 		  </div>
 		</div>

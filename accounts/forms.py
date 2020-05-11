@@ -1,13 +1,16 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Row, Column, Field
+from crispy_forms.layout import Layout, Submit
 
 class MyUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
         model = User
         fields = ('first_name', 'last_name', 'email',)
+        labels = {
+            'email': 'Email'
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

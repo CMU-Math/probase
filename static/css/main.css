@@ -6,3 +6,12 @@
 a.title-link {
   color: black;
 }
+
+.btn-round {
+  border-radius: 50px;
+}
+
+/*
+i.fas {
+  padding-right: 0.7rem;
+}*/
