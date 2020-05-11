@@ -4,11 +4,16 @@
 
 {% block content %}
 <div class=row>
-  <div class="col-md-6">
+	<div class="col{% if hi %}-md-6{% endif %}">
   <form method="post">
     {% csrf_token %}
-    {% crispy form %}
+	{% crispy form %}
   </form>
   </div>
+{% if preview %}
+  <div class="col">
+	{% include "problem_preview.html" %}
+  </div>
+{% endif %}
 </div>
 {% endblock %}

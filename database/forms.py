@@ -12,8 +12,8 @@ class NewProblemForm(ModelForm):
             'problem_text': 'Problem'
         }
         widgets = {
-            'problem_text': Textarea(attrs={'rows': 20}),
-            'solution': Textarea(attrs={'rows': 20}),
+            'problem_text': Textarea(attrs={'rows': 6}),
+            'solution': Textarea(attrs={'rows': 8}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -26,7 +26,9 @@ class NewProblemForm(ModelForm):
             Field('solution', autocomplete="off"),
             ButtonHolder(
                 HTML('<a href={% url "home" %} class="btn btn-secondary">Cancel</a> '),
-                Submit('submit', 'Submit'),
-            )
+                Submit('submit', 'Submit', formnovalidate=''),
+                Submit('preview', 'Preview', formnovalidate=''),
+                css_class='mb-5',
+            ),
         )
 
