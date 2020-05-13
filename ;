@@ -9,6 +9,6 @@
 	{% endfor %}
   </ul>
 {% else %}
-  You must be logged in to view or submit problems.
+  You need to log in before viewing or submitting problems.
 {% endif %}
 {% endblock %}

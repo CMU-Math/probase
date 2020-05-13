@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="clearfix mb-3">
+  <h2 class="float-left">
+	{% if all_problems %}
+	  All Problems
+	{% else %}
+	  My problems
+	{% endif %}
+  </h2>
+  {% if user.is_writer or user.is_staff %}
+    <a href="{% url 'new_problem' %}" class="btn btn-primary btn-lg btn-round float-right">
+	  <i class="fas fa-plus"></i><span class="d-none d-sm-inline icon-left">New Problem</span>
+    </a>
+  {% endif %}
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+	Search and Filter (not implemented yet)
+  </div>
+
+  <div class="col-md-8">
+	<div class="card-deck-wrapper">
+	  {% if problem_list %}
+	    {% for problem in problem_list %}
+	      <div class="card">
+		    <div class="card-body">
+			  <h4 class="card-title">
+			    <a href="{% url 'problem_detail' problem.id %}" class="stretched-link title-link">
+				  {{ problem.title }}
+			    </a>
+			  </h4>
+			  {{ problem.problem_text }}
+		    </div>
+		  </div>
+	    {% endfor %}
+	  {% else %}
+	    {{ empty_message }}
+	  {% endif %}
+	</div>
+  </div>
+</div>
+
+{% endblock %}
