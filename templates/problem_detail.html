@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>{{ problem.title }}</h1>
-  <p>Author: {{ problem.author }}</p>
-  <p>Problem Text: {{ problem.problem_text }}</p>
-  <p>Answer: {{ problem.answer }}</p>
-  <p>Solution: {{ problem.solution }}</p>
-  <a href="{% url 'home' %}">Back to Home</a>
+<div class="clearfix mb-3">
+  <h2 class="float-left">{{ problem.title }}</h2>
+  {% if user.is_staff or user == problem.author %}
+    <a href="{% url 'edit_problem' problem.id %}" class="btn btn-primary btn-lg btn-round float-right">
+	  <i class="fas fa-edit"></i><span class="d-none d-sm-inline icon-left">Edit Problem</span>
+    </a>
+  {% endif %}
+</div>
+
+  {% include 'problem_preview.html' with problem_text=problem.problem_text answer=problem.answer solution=problem.solution %}
+  <p class="text-secondary">Proposed by {{ problem.author }}</p>
 {% endblock %}

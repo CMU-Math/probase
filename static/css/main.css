@@ -11,7 +11,7 @@ a.title-link {
   border-radius: 50px;
 }
 
-/*
-i.fas {
-  padding-right: 0.7rem;
-}*/
+.icon-left {
+  margin-left: 0.7rem;
+}
+
