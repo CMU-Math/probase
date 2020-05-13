@@ -10,22 +10,48 @@
   </head>
   <body>
 
-	  <nav class="navbar navbar-expand{% if user.is_authenticated %}-sm{% endif %} navbar-dark bg-dark">
+	<nav class="navbar navbar-expand{% if user.is_authenticated %}-md{% endif %} navbar-dark bg-dark">
 	  <div class="container-fluid">
 		<a class="navbar-brand" href="{% url 'home' %}">Probase</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu" aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
 		  <span class="navbar-toggler-icon"></span>
 		</button>
+
 		<div class="collapse navbar-collapse" id="mainMenu">
 		  {% if user.is_authenticated %}
+			<ul class="navbar-nav mr-auto ml-md-3">
+			{% url 'my_problems' as url_mine %}
+			{% url 'all_problems' as url_all %}
+			{% url 'manage_users' as url_manage %}
+			{% if user.is_writer or user.is_staff %}
+			  <li class="nav-item">
+				  <a class="nav-link {% if request.get_full_path == url_mine %}active{% endif %}" href="{% url 'my_problems' %}">My Problems</a>
+			  </li>
+			{% endif %}
+			{% if user.is_solver or user.is_staff %}
+			  <li class="nav-item">
+				<a class="nav-link {% if request.get_full_path == url_all %}active{% endif %}" href="{% url 'all_problems' %}">All Problems</a>
+			  </li>
+			{% endif %}
+			{% if user.is_staff %}
+			  <li class="nav-item">
+				<a class="nav-link {% if request.get_full_path == url_manage %}active{% endif %}" href="{% url 'manage_users' %}">Manage Users</a>
+			  </li>
+			{% endif %}
+			{% if user.is_staff or user.is_solver or user.is_writer %}
+			  <li class="nav-item">
+				<a class="nav-link {% if request.get_full_path == url_manage %}active{% endif %}" href="{% url 'manage_users' %}">Create Test</a>
+			  </li>
+			{% endif %}
+			</ul>
+
 			<ul class="navbar-nav ml-auto">
 			  <li class="nav-item dropdown">
 				<a class="nav-link dropdown-toggle" href="#" id="userMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 				  {{ user }}
 				</a>
 				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userMenu">
-				  <a class="dropdown-item" href="#">My account</a>
-				  <a class="dropdown-item" href="#">Change password</a>
+				  <a class="dropdown-item" href="{% url 'change_password' %}">Change password</a>
 				  <div class="dropdown-divider"></div>
 				  <a class="dropdown-item" href="{% url 'logout' %}">Log out</a>
 				</div>

@@ -22,10 +22,9 @@ def all_problems(request):
     if not request.user.is_solver and not request.user.is_staff:
         raise PermissionDenied
     problem_list = Problem.objects.all().order_by('-creation_time')
-    empty_message = 'There are no problems in the database yet'
+    empty_message = 'There are no problems in the database yet.'
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
-        'all_problems': True,
         'empty_message': empty_message,
     })
 
@@ -34,7 +33,7 @@ def my_problems(request):
     if not request.user.is_writer and not request.user.is_staff:
         raise PermissionDenied
     problem_list = Problem.objects.filter(author=request.user).order_by('-creation_time')
-    empty_message = "You don't have any problems yet"
+    empty_message = "You haven't submitted any problems yet."
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
         'empty_message': empty_message,
@@ -66,7 +65,7 @@ def new_problem(request):
             data['form'] = form
             return render(request, 'new_problem.html', data)
         else:
-            assert(request.POST.get('submit'))
+            assert(request.POST.get('add_problem'))
             form = NewProblemForm(request.POST)
             if form.is_valid():
                 problem = form.save(commit=False)
@@ -104,6 +103,8 @@ def edit_problem(request, problem_id):
         if request.POST.get('cancel'):
             return redirect('problem_detail', problem_id=problem_id)
         elif request.POST.get('preview'):
+            print('preview')
+            print(data['problem_text'])
             form = EditProblemForm(initial=data)
             data['form'] = form
             return render(request, 'edit_problem.html', data)

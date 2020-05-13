@@ -4,7 +4,8 @@
 
 <div class="clearfix mb-3">
   <h2 class="float-left">
-	{% if all_problems %}
+	{% url 'all_problems' as url_all %}
+	{% if request.get_full_path == url_all %}
 	  All Problems
 	{% else %}
 	  My problems

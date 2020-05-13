@@ -15,3 +15,8 @@ a.title-link {
   margin-left: 0.7rem;
 }
 
+@media (min-width: 576px) {
+  .form-horizontal .col-form-label {
+	text-align: right;
+  }
+}

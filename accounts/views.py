@@ -1,5 +1,7 @@
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
 from .forms import MyUserCreationForm
 
 def signup(request):
@@ -15,3 +17,9 @@ def signup(request):
     else:
         form = MyUserCreationForm()
     return render(request, 'signup.html', {'form': form})
+
+@login_required
+def manage_users(request):
+    if not request.user.is_staff:
+        return PermissionDenied
+    return 

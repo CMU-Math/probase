@@ -1,7 +1,8 @@
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit
+from crispy_forms.layout import Layout, Submit, ButtonHolder
+from crispy_forms.bootstrap import FormActions
 
 class MyUserCreationForm(UserCreationForm):
 
@@ -16,13 +17,16 @@ class MyUserCreationForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-md-2'
-        self.helper.field_class = 'col-md-10'
+        self.helper.label_class = 'col-sm-3 col-md-2'
+        self.helper.field_class = 'col-sm-9 col-md-10'
         self.helper.layout = Layout(
             'first_name',
             'last_name',
             'email',
             'password1',
             'password2',
-            Submit('submit', 'Sign Up')
+            FormActions(
+                Submit('submit', 'Sign Up'),
+                css_class='form-group row',
+            )
         )
