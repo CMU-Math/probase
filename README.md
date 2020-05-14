@@ -8,23 +8,14 @@
 3. In the newly created folder, run `pip install -r requirements.txt`
 4. Then run Django migrations: `python manage.py migrate`
 5. Start the Django development server: `python manage.py runserver`
-6. Go to [http://127.0.0.1:8000/home/](http://127.0.0.1:8000/home/) in your browser, and you should see the home page. It should look like the image below:
+6. Go to [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, and you should see the home page. It should look like the image below:
 
     ![Home Page](static/img/homepage.png)
 
-### Django Admin and User setup
-If you click the new problem link and try to submit a problem, you'll get an error. This is because each problem requires an author, which must be an instance of [Django's User class](https://docs.djangoproject.com/en/3.0/ref/contrib/auth/) (if you want to see how a problem is defined, see [database/models.py](https://github.com/CMU-Math/probase/blob/master/database/models.py). Since we haven't implemented any user accounts yet, the problem author defaults to the first user account (line 20 of [database/views.py](https://github.com/CMU-Math/probase/blob/master/database/views.py) if you're curious). The error happens because there aren't any user accounts yet. Here's how to fix it:
-
-1. Run `python manage.py createsuperuser`, and enter any username, email, and password.
-2. Go to [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/) and login with the account
-you just created.
-3. You should see the Django admin site:
-    ![Django admin site](static/img/django-admin.png)
-    
-    Click on "Users", then select the account you just created, enter a first and last name, and save the changes.
-4. Go back to the home page ([http://127.0.0.1:8000/home/](http://127.0.0.1:8000/home/)) and submit a new problem. It should create a problem detail page at [http://127.0.0.1:8000/problem/1/](http://127.0.0.1:8000/problem/1/) which shows the details of the new problem, and the author should be the name you entered.
-
-    ![Problem detail page](static/img/problem-detail.png)
+### Making user accounts
+1. First, create a super user account: `python manage.py createsuperuser`. You can enter any name, email, and password.
+2. Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) again, and you should be redicted to the 'All Problems' page. There won't be any problems yet, but you can create one with the 'New Problem' button.
+3. The super user account you created in step 1 has all permissions enabled: problem writer, testsolver, and staff. If you create a new account normally (click 'log out', then 'sign up' in the top right), it will have no permissions enabled by default. You have to go to the [Manage Users](http://127.0.0.1:8000/manage-users/) page to change their permissions.
 
 ### Tutorials
 For anyone new to either Python or Django, here are some tutorials.

@@ -22,7 +22,7 @@ def signup(request):
 @login_required
 def manage_users(request):
     if not request.user.is_staff:
-        return PermissionDenied
+        raise PermissionDenied
     if request.method == 'POST':
         user = User.objects.get(id=request.POST['userid'])
         data = {
@@ -33,7 +33,11 @@ def manage_users(request):
         form = UserPermissionsForm(data, instance=user)
         assert(form.is_valid())
         form.save()
-        redirect('manage_users')
+
+    # if staff makes themselves non-staff, they shouldn't be allowed to make more changes
+    # this doesn't seem to be working though
+    if not request.user.is_staff:
+        raise PermissionDenied
 
     users = User.objects.all()
     return render(request, 'manage_users.html', {'users': users})

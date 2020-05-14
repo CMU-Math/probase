@@ -174,3 +174,11 @@ def edit_problem(request, problem_id):
     else:
         form = EditProblemForm(instance=problem)
         return render(request, 'edit_problem.html', {'form': form })
+
+@login_required
+def create_test(request):
+    if not request.user.is_staff and not request.user.is_writer and not request.user.is_solver:
+        raise PermissionDenied
+    # not implemented yet
+    return
+

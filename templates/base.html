@@ -20,17 +20,19 @@
 		<div class="collapse navbar-collapse" id="mainMenu">
 		  {% if user.is_authenticated %}
 			<ul class="navbar-nav mr-auto ml-md-3">
-			{% url 'my_problems' as url_mine %}
 			{% url 'all_problems' as url_all %}
+			{% url 'my_problems' as url_mine %}
 			{% url 'manage_users' as url_manage %}
-			{% if user.is_writer or user.is_staff %}
-			  <li class="nav-item">
-				  <a class="nav-link {% if request.get_full_path == url_mine %}active{% endif %}" href="{% url 'my_problems' %}">My Problems</a>
-			  </li>
-			{% endif %}
+			{% url 'create_test' as url_create %}
+
 			{% if user.is_solver or user.is_staff %}
 			  <li class="nav-item">
 				<a class="nav-link {% if request.get_full_path == url_all %}active{% endif %}" href="{% url 'all_problems' %}">All Problems</a>
+			  </li>
+			{% endif %}
+			{% if user.is_writer or user.is_staff %}
+			  <li class="nav-item">
+				  <a class="nav-link {% if request.get_full_path == url_mine %}active{% endif %}" href="{% url 'my_problems' %}">My Problems</a>
 			  </li>
 			{% endif %}
 			{% if user.is_staff %}
@@ -40,7 +42,7 @@
 			{% endif %}
 			{% if user.is_staff or user.is_solver or user.is_writer %}
 			  <li class="nav-item">
-				<a class="nav-link {% if request.get_full_path == url_manage %}active{% endif %}" href="{% url 'manage_users' %}">Create Test</a>
+				<a class="nav-link {% if request.get_full_path == url_create %}active{% endif %}" href="{% url 'manage_users' %}">Create Test</a>
 			  </li>
 			{% endif %}
 			</ul>
