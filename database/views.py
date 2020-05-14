@@ -79,7 +79,7 @@ def problem_detail(request, problem_id):
                     'rating_form': form,
                 })
     rating = problem.ratings.filter(user=request.user).first()
-    print(rating.user, rating.problem, rating.difficulty, rating.quality)
+#    print(rating.user, rating.problem, rating.difficulty, rating.quality)
     if rating:
         print('rating exists start')
         rating_form = RatingForm(instance=rating)
