@@ -18,7 +18,7 @@
 3. The super user account you created in step 1 has all permissions enabled: problem writer, testsolver, and staff. If you create a new account normally (click 'log out', then 'sign up' in the top right), it will have no permissions enabled by default. You have to go to the [Manage Users](http://127.0.0.1:8000/manage-users/) page to change their permissions.
 
 ### Tutorials
-For anyone new to either Python or Django, here are some tutorials.
+For anyone new to either Python, Django, or Bootstrap, here are some tutorials.
 
 Python Tutorials:
 - [https://www.learnpython.org/](https://www.learnpython.org/)
@@ -29,3 +29,6 @@ Django Tutorials:
 - [https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/](https://simpleisbetterthancomplex.com/series/beginners-guide/1.11/)
 - [https://docs.djangoproject.com/en/3.0/intro/tutorial01/](https://docs.djangoproject.com/en/3.0/intro/tutorial01/)
 - [Django Documentation](https://docs.djangoproject.com/en/3.0/topics/)
+
+Bootstrap:
+- [https://www.youtube.com/playlist?list=PL41lfR-6DnOovY0t3nBg8Zb6aqm_H70mR](https://www.youtube.com/playlist?list=PL41lfR-6DnOovY0t3nBg8Zb6aqm_H70mR)
