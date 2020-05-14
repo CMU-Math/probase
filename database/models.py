@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import Avg, Sum
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Problem(models.Model):
     title = models.CharField(max_length=100, unique=True)
@@ -16,15 +18,19 @@ class Problem(models.Model):
     def __str__(self):
         return self.title
 
-class QualityRating(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="qratings")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
-    score = models.IntegerField()
+    def avg_difficulty(self):
+        ratings = self.ratings.all()
+        return ratings.aggregate(Avg('difficulty'))['difficulty__avg']
 
-class DifficultyRating(models.Model):
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="dratings")
+    def avg_quality(self):
+        ratings = self.ratings.all()
+        return ratings.aggregate(Avg('quality'))['quality__avg']
+
+class Rating(models.Model):
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="ratings")
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
-    score = models.IntegerField()
+    difficulty = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
+    quality = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
 
 class Comment(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="comments")

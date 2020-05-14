@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.exceptions import PermissionDenied
 from .models import Problem
-from .forms import NewProblemForm, EditProblemForm
+from .forms import NewProblemForm, EditProblemForm, RatingForm
 
 def home(request):
     if request.user.is_authenticated:
@@ -44,7 +44,56 @@ def problem_detail(request, problem_id):
     problem = get_object_or_404(Problem, pk=problem_id)
     if not request.user.is_solver and not request.user.is_staff and request.user != problem.author:
         raise PermissionDenied
-    return render(request, 'problem_detail.html', {'problem': problem})
+    if request.method == 'POST':
+        print('post')
+        old_rating = problem.ratings.filter(user=request.user).first()
+        if old_rating:
+            print('updating old rating')
+            form = RatingForm(request.POST, instance=old_rating)
+            if form.is_valid():
+                print('valid')
+                form.save()
+            else: # need to continue showing errors in modal
+                print('invalid')
+                return render(request, 'problem_detail.html', {
+                    'problem': problem,
+                    'avg_difficulty': problem.avg_difficulty(),
+                    'avg_quality': problem.avg_quality(),
+                    'rating_form': form,
+                })
+        else:
+            print('making new rating')
+            form = RatingForm(request.POST)
+            if form.is_valid():
+                print('valid')
+                rating = form.save(commit=False)
+                rating.problem = problem
+                rating.user = request.user
+                rating.save()
+            else: # need to continue showing errors in modal
+                print('invalid')
+                return render(request, 'problem_detail.html', {
+                    'problem': problem,
+                    'avg_difficulty': problem.avg_difficulty(),
+                    'avg_quality': problem.avg_quality(),
+                    'rating_form': form,
+                })
+    rating = problem.ratings.filter(user=request.user).first()
+    print(rating.user, rating.problem, rating.difficulty, rating.quality)
+    if rating:
+        print('rating exists start')
+        rating_form = RatingForm(instance=rating)
+        print('done')
+    else:
+        print('no rating')
+        rating_form = RatingForm()
+    print('avg diff = ', problem.avg_difficulty())
+    return render(request, 'problem_detail.html', {
+        'problem': problem,
+        'avg_difficulty': problem.avg_difficulty(),
+        'avg_quality': problem.avg_quality(),
+        'rating_form': rating_form,
+    })
 
 @login_required
 def new_problem(request):

@@ -2,19 +2,23 @@
 
 {% block content %}
 
-<div class="clearfix mb-3">
-  <h2 class="float-left">
-	{% url 'all_problems' as url_all %}
-	{% if request.get_full_path == url_all %}
-	  All Problems
-	{% else %}
-	  My problems
-	{% endif %}
-  </h2>
+<div class="row mb-3">
+  <div class="col">
+    <h2>
+  	  {% url 'all_problems' as url_all %}
+	  {% if request.get_full_path == url_all %}
+	    All Problems
+	  {% else %}
+	    My problems
+	  {% endif %}
+	</h2>
+  </div>
   {% if user.is_writer or user.is_staff %}
-    <a href="{% url 'new_problem' %}" class="btn btn-primary btn-lg btn-round float-right">
-	  <i class="fas fa-plus"></i><span class="d-none d-sm-inline icon-left">New Problem</span>
-    </a>
+    <div class="col-auto">
+      <a href="{% url 'new_problem' %}" class="btn btn-primary btn-lg btn-round">
+	    <i class="fas fa-plus"></i><span class="d-none d-sm-inline icon-left">New Problem</span>
+      </a>
+    </div>
   {% endif %}
 </div>
 

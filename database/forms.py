@@ -1,5 +1,5 @@
-from django.forms import ModelForm, Textarea
-from .models import Problem
+from django.forms import ModelForm, Textarea, TextInput, NumberInput
+from .models import Problem, Rating
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.bootstrap import FormActions
@@ -73,4 +73,27 @@ class EditProblemForm(ModelForm):
             ),
         )
 
+class RatingForm(ModelForm):
+
+    class Meta:
+        model = Rating
+        fields = ('difficulty', 'quality')
+        widgets = {
+            'difficulty': NumberInput(attrs={
+                'min': 1,
+                'max': 10,
+            }),
+            'quality': NumberInput(attrs={
+                'min': 1,
+                'max': 10,
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('difficulty'),
+            Field('quality'),
+        )
 
