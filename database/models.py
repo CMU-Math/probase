@@ -21,7 +21,7 @@ class Problem(models.Model):
 
     problem_text = models.CharField(max_length=1000) # problem (in latex)
     answer = models.CharField(max_length=100) # answer (in latex)
-    solution = models.CharField(max_length=10000) # solution (in latex)
+    solution = models.CharField(max_length=2000) # solution (in latex)
 
     update_time = models.DateTimeField(null=True) # time of last update
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, related_name="+") # user who last updated it
