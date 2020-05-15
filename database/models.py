@@ -6,7 +6,18 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 class Problem(models.Model):
     title = models.CharField(max_length=100, unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="problems")
-    creation_time = models.DateTimeField(auto_now_add=True) 
+    creation_time = models.DateTimeField(auto_now_add=True)
+    subject = models.CharField(
+        max_length = 5,
+        choices = [
+            ('', 'Choose...'),
+            ('alg', 'Algebra'),
+            ('nt', 'Number Theory'),
+            ('geo', 'Geometry'),
+            ('combo', 'Combinatorics'),
+            ('cs', 'Computer Science'),
+            ('other', 'Other'),
+        ])
 
     problem_text = models.CharField(max_length=1000) # problem (in latex)
     answer = models.CharField(max_length=100) # answer (in latex)

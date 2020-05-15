@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class=row>
+  <div class="col{% if preview %}-md-6{% endif %}">
+    <form method="post">
+	  <input type="hidden" name="showing-preview" value="{{ preview }}">
+      {% csrf_token %}
+	  {% crispy form %}
+    </form>
+  </div>
+  {% if preview %}
+    <div class="col-md-6">
+	  <div class="card mb-4">
+	    <div class="card-header">
+		  Problem
+	    </div>
+	    <div class="card-body">
+		  {{ problem_text|linebreaks }}
+	    </div>
+	  </div>
+
+	  <div class="card mb-4">
+	    <div class="card-header">
+		  Answer
+	    </div>
+	    <div class="card-body">
+		  {{ answer|linebreaks }}
+	    </div>
+	  </div>
+
+	  <div class="card mb-4">
+	    <div class="card-header">
+		  Solution
+	    </div>
+	    <div class="card-body">
+		  {{ solution|linebreaks }}
+	    </div>
+	  </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

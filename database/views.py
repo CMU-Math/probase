@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.exceptions import PermissionDenied
 from .models import Problem
-from .forms import NewProblemForm, EditProblemForm, RatingForm
+from .forms import ProblemForm, RatingForm
 
 def home(request):
     if request.user.is_authenticated:
@@ -102,20 +102,19 @@ def new_problem(request):
     if request.method == 'POST':
         data = {
             'preview': True,
+            'subject': request.POST['subject'],
             'title': request.POST['title'],
             'problem_text': request.POST['problem_text'],
             'answer': request.POST['answer'],
             'solution': request.POST['solution'],
         }
-        if request.POST.get('cancel'):
-            return redirect('home')
-        elif request.POST.get('preview'):
-            form = NewProblemForm(initial=data)
+        if request.POST.get('preview'):
+            form = ProblemForm(initial=data)
             data['form'] = form
-            return render(request, 'new_problem.html', data)
+            return render(request, 'make_problem.html', data)
         else:
-            assert(request.POST.get('add_problem'))
-            form = NewProblemForm(request.POST)
+            assert(request.POST.get('submit'))
+            form = ProblemForm(request.POST)
             if form.is_valid():
                 problem = form.save(commit=False)
                 problem.author = request.user
@@ -126,12 +125,12 @@ def new_problem(request):
                 # also show error messages
                 if request.POST['showing-preview'] == 'True':
                     data['form'] = form
-                    return render(request, 'new_problem.html', data)
+                    return render(request, 'make_problem.html', data)
                 else:
-                    return render(request, 'new_problem.html', {'form': form})
+                    return render(request, 'make_problem.html', {'form': form})
     else:
-        form = NewProblemForm()
-        return render(request, 'new_problem.html', {'form': form })
+        form = ProblemForm()
+        return render(request, 'make_problem.html', {'form': form })
 
 @login_required
 def edit_problem(request, problem_id):
@@ -154,12 +153,12 @@ def edit_problem(request, problem_id):
         elif request.POST.get('preview'):
             print('preview')
             print(data['problem_text'])
-            form = EditProblemForm(initial=data)
+            form = ProblemForm(initial=data)
             data['form'] = form
-            return render(request, 'edit_problem.html', data)
+            return render(request, 'make_problem.html', data)
         else:
-            assert(request.POST.get('save'))
-            form = EditProblemForm(request.POST, instance=problem)
+            assert(request.POST.get('submit'))
+            form = ProblemForm(request.POST, instance=problem)
             if form.is_valid():
                 form.save()
                 return redirect('problem_detail', problem_id=problem_id)
@@ -168,12 +167,12 @@ def edit_problem(request, problem_id):
                 # also show error messages
                 if request.POST['showing-preview'] == 'True':
                     data['form'] = form
-                    return render(request, 'edit_problem.html', data)
+                    return render(request, 'make_problem.html', data)
                 else:
-                    return render(request, 'edit_problem.html', {'form': form})
+                    return render(request, 'make_problem.html', {'form': form})
     else:
-        form = EditProblemForm(instance=problem)
-        return render(request, 'edit_problem.html', {'form': form })
+        form = ProblemForm(instance=problem)
+        return render(request, 'make_problem.html', {'form': form })
 
 @login_required
 def create_test(request):
