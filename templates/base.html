@@ -42,7 +42,7 @@
 			{% endif %}
 			{% if user.is_staff or user.is_solver or user.is_writer %}
 			  <li class="nav-item">
-				<a class="nav-link {% if request.get_full_path == url_create %}active{% endif %}" href="{% url 'manage_users' %}">Create Test</a>
+				<a class="nav-link {% if request.get_full_path == url_create %}active{% endif %}" href="{% url 'create_test' %}">Create Test</a>
 			  </li>
 			{% endif %}
 			</ul>

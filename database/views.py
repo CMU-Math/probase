@@ -180,5 +180,5 @@ def create_test(request):
     if not request.user.is_staff and not request.user.is_writer and not request.user.is_solver:
         raise PermissionDenied
     # not implemented yet
-    return
+    return render(request, 'create_test.html')
 
