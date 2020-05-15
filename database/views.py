@@ -45,49 +45,45 @@ def problem_detail(request, problem_id):
     if not request.user.is_solver and not request.user.is_staff and request.user != problem.author:
         raise PermissionDenied
     if request.method == 'POST':
-        print('post')
-        old_rating = problem.ratings.filter(user=request.user).first()
-        if old_rating:
-            print('updating old rating')
-            form = RatingForm(request.POST, instance=old_rating)
-            if form.is_valid():
-                print('valid')
-                form.save()
-            else: # need to continue showing errors in modal
-                print('invalid')
-                return render(request, 'problem_detail.html', {
-                    'problem': problem,
-                    'avg_difficulty': problem.avg_difficulty(),
-                    'avg_quality': problem.avg_quality(),
-                    'rating_form': form,
-                })
+        print(request.POST)
+        assert request.POST.get('submit')
+        if request.POST['submit'] == 'delete':
+            problem.delete()
+            return redirect('home')
+        elif request.POST['submit'] == 'rate':
+            old_rating = problem.ratings.filter(user=request.user).first()
+            if old_rating:
+                form = RatingForm(request.POST, instance=old_rating)
+                if form.is_valid():
+                    form.save()
+                else: # need to continue showing errors in modal
+                    return render(request, 'problem_detail.html', {
+                        'problem': problem,
+                        'avg_difficulty': problem.avg_difficulty(),
+                        'avg_quality': problem.avg_quality(),
+                        'rating_form': form,
+                    })
+            else:
+                form = RatingForm(request.POST)
+                if form.is_valid():
+                    rating = form.save(commit=False)
+                    rating.problem = problem
+                    rating.user = request.user
+                    rating.save()
+                else: # need to continue showing errors in modal
+                    return render(request, 'problem_detail.html', {
+                        'problem': problem,
+                        'avg_difficulty': problem.avg_difficulty(),
+                        'avg_quality': problem.avg_quality(),
+                        'rating_form': form,
+                    })
         else:
-            print('making new rating')
-            form = RatingForm(request.POST)
-            if form.is_valid():
-                print('valid')
-                rating = form.save(commit=False)
-                rating.problem = problem
-                rating.user = request.user
-                rating.save()
-            else: # need to continue showing errors in modal
-                print('invalid')
-                return render(request, 'problem_detail.html', {
-                    'problem': problem,
-                    'avg_difficulty': problem.avg_difficulty(),
-                    'avg_quality': problem.avg_quality(),
-                    'rating_form': form,
-                })
+            assert False, "invalid submit"
     rating = problem.ratings.filter(user=request.user).first()
-#    print(rating.user, rating.problem, rating.difficulty, rating.quality)
     if rating:
-        print('rating exists start')
         rating_form = RatingForm(instance=rating)
-        print('done')
     else:
-        print('no rating')
         rating_form = RatingForm()
-    print('avg diff = ', problem.avg_difficulty())
     return render(request, 'problem_detail.html', {
         'problem': problem,
         'avg_difficulty': problem.avg_difficulty(),
@@ -113,7 +109,7 @@ def new_problem(request):
             data['form'] = form
             return render(request, 'make_problem.html', data)
         else:
-            assert(request.POST.get('submit'))
+            assert request.POST.get('submit')
             form = ProblemForm(request.POST)
             if form.is_valid():
                 problem = form.save(commit=False)
@@ -157,7 +153,7 @@ def edit_problem(request, problem_id):
             data['form'] = form
             return render(request, 'make_problem.html', data)
         else:
-            assert(request.POST.get('submit'))
+            assert request.POST.get('submit')
             form = ProblemForm(request.POST, instance=problem)
             if form.is_valid():
                 form.save()

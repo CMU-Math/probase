@@ -32,3 +32,6 @@ Django Tutorials:
 
 Bootstrap:
 - [https://www.youtube.com/playlist?list=PL41lfR-6DnOovY0t3nBg8Zb6aqm_H70mR](https://www.youtube.com/playlist?list=PL41lfR-6DnOovY0t3nBg8Zb6aqm_H70mR)
+
+Git:
+- [https://guides.github.com/introduction/git-handbook/](https://guides.github.com/introduction/git-handbook/)
