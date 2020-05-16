@@ -3,44 +3,126 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<table class="table table-hover">
-  <thead>
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Problem Writer</th>
-	  <th scope="col">Testsolver</th>
-      <th scope="col">Staff</th>
-      <th scope="col"></th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for u in users %}
-    <tr>
-	  <th scope="row">{{ u }}</th>
-	  <td>
-		<div class="form-check">
-		  <input class="form-check-input" type="checkbox" name="is_writer" form="form{{ u.id }}" {% if u.is_writer %}checked{% endif %}>
-		</div>
-	  </td>
-	  <td>
-		<div class="form-check">
-		  <input class="form-check-input" type="checkbox" name="is_solver" form="form{{ u.id }}" {% if u.is_solver %}checked{% endif %}>
-		</div>
-	  </td>
-      <td>
-		<div class="form-check">
-		  <input class="form-check-input" type="checkbox" name="is_staff" form="form{{ u.id }}" {% if u.is_staff %}checked{% endif %}>
-		</div>
-	  </td>
-	  <td>
-		<form method="post" id="form{{ u.id }}">
-		  {% csrf_token %}
-		  <input type="submit" class="btn btn-primary" name="submit" value="Save">
-		  <input type="hidden" name="userid" value="{{ u.id }}">
-		</form>
-	  </td>
-    </tr>
-	{% endfor %}
-  </tbody>
-</table>
+
+<script>
+var context = {
+{% for u in user_list %}
+  {{ u.id }}: {
+    'is_writer': {{ u.is_writer|lower }},
+    'is_solver': {{ u.is_solver|lower }},
+    'is_staff': {{ u.is_staff|lower }},
+  },
+{% endfor %}
+};
+</script>
+
+<script>
+function enableButton(id) {
+  var button = document.getElementById("save" + id);
+  var writer = document.getElementById("writer" + id);
+  var solver = document.getElementById("solver" + id);
+  var staff = document.getElementById("staff" + id);
+  if (writer.checked == context[id]['is_writer'] && solver.checked == context[id]['is_solver'] && staff.checked == context[id]['is_staff']) {
+	button.disabled = true;
+	button.style.pointerEvents = "none";
+	$('#tooltip' + id).tooltip('enable');
+  } else {
+	button.disabled = false;
+	button.style.pointerEvents = "auto";
+	$('#tooltip' + id).tooltip('disable');
+  }
+};
+</script>
+
+<script>
+$(document).ready(function() {
+  for (var id of Object.keys(context)) {
+	enableButton(id);
+  }
+});
+</script>
+
+<script>
+function submitOrModal(id) {
+  var staff = document.getElementById("staff" + id);
+  if (context[id]['is_staff'] && !staff.checked) {
+	$('#selfNonStaffModal').modal('show');
+  } else {
+	document.getElementById("form" + id).submit();
+  }
+};
+</script>
+
+<div class="accordion" id="accordion">
+  {% for u in user_list %}
+    <div class="card">
+      <div class="card-header" style="transform: rotate(0);">
+		<a href="#collapse{{ u.id }}" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">{{ u }}</a>
+      </div>
+	  <div id="collapse{{ u.id }}" class="collapse" data-parent="#accordion">
+		<div class="card-body">
+		  <div class="row">
+			<div class="col-sm-5 offset-1 col-lg-4 offset-lg-2">
+			  <form method="post" id="form{{ u.id }}">
+				{% csrf_token %}
+				<div class="form-group">
+				  <div class="custom-control custom-checkbox">
+					  <input type="checkbox" class="custom-control-input" id="writer{{ u.id }}" onclick="enableButton({{ u.id }})" name="is_writer" {% if u.is_writer %}checked{% endif %}>
+					<label class="custom-control-label" for="writer{{ u.id }}">Problem Writer</label>
+				  </div>
+				  <div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="solver{{ u.id }}" onclick="enableButton({{ u.id }})" name="is_solver" {% if u.is_solver %}checked{% endif %}>
+					<label class="custom-control-label" for="solver{{ u.id }}">Testsolver</label>
+				  </div>
+				  <div class="custom-control custom-checkbox">
+					<input type="checkbox" class="custom-control-input" id="staff{{ u.id }}" onclick="enableButton({{ u.id }})" name="is_staff" {% if u.is_staff %}checked{% endif %}>
+					<label class="custom-control-label" for="staff{{ u.id }}">Staff</label>
+				  </div>
+				</div>
+				<input type="hidden" name="userid" value="{{ u.id }}">
+
+				<span class="d-inline-block" id="tooltip{{ u.id }}" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="No changes to save">
+				{% if u == user %}
+				<button type="button" class="btn btn-primary" onclick="submitOrModal({{ u.id }})" id="save{{ u.id }}" disabled style="pointer-events: none;">Save Changes</button>
+				{% else %}
+				  <button type="submit" class="btn btn-primary" id="save{{ u.id }}" disabled style="pointer-events: none;">Save Changes</button>
+				</span>
+				{% endif %}
+			  </form>
+			</div>
+			<hr class="w-100 d-sm-none mt-4 mb-2"/>
+			<div class="col offset-1 col-sm-3 offset-sm-0">
+			  <span class="mb-0" style="font-size: 2.5rem;">{{ u.num_problems }}</span><br/>Problems
+			</div>
+			<div class="col col-sm-3 offset-sm-0">
+			  <span style="font-size: 2.5rem;">{{ u.num_ratings }}</span></br>Ratings
+			</div>
+		  </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<div class="modal fade" id="selfNonStaffModal" tabindex="-1" role="dialog" aria-labelledby="selfNonStaffModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="selfNonStaffModalLabel">Are you sure?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+		By making yourself a non-staff user, you will no longer be able to access the Manage Users page.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">Cancel</button>
+		<button type="submit" class="btn btn-danger" form="form{{ user.id }}">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 {% endblock %}

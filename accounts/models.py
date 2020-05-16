@@ -53,3 +53,12 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.get_full_name()
+
+    def num_problems(self):
+        return self.problems.all().count()
+
+    def num_ratings(self):
+        return self.ratings.all().count()
+
+    def num_comments(self):
+        return self.comments.all().count()

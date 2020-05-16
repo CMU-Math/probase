@@ -1,7 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import User
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, ButtonHolder, Field, Hidden
+from crispy_forms.layout import Layout, Submit, ButtonHolder, Field, Hidden, Button
 from crispy_forms.bootstrap import FormActions
 
 class MyUserCreationForm(UserCreationForm):
@@ -30,20 +30,3 @@ class MyUserCreationForm(UserCreationForm):
                 css_class='form-group row',
             )
         )
-
-class UserPermissionsForm(UserChangeForm):
-
-    class Meta:
-        model = User
-        fields = ('is_writer', 'is_solver', 'is_staff')
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.layout = Layout(
-            Field('is_writer'),
-            Field('is_solver'),
-            Field('is_staff'),
-            Hidden('userid', 'id'),
-        )
-

@@ -2,7 +2,7 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
-from .forms import MyUserCreationForm, UserPermissionsForm
+from .forms import MyUserCreationForm
 from .models import User
 
 def signup(request):
@@ -23,21 +23,17 @@ def signup(request):
 def manage_users(request):
     if not request.user.is_staff:
         raise PermissionDenied
+
     if request.method == 'POST':
-        user = User.objects.get(id=request.POST['userid'])
-        data = {
-            'is_writer': request.POST.get('is_writer') == 'on',
-            'is_solver': request.POST.get('is_solver') == 'on',
-            'is_staff': request.POST.get('is_staff') == 'on',
-        }
-        form = UserPermissionsForm(data, instance=user)
-        assert(form.is_valid())
-        form.save()
+        userid = int(request.POST['userid'])
+        user = User.objects.get(id=userid)
+        user.is_writer = request.POST.get('is_writer') == 'on'
+        user.is_solver = request.POST.get('is_solver') == 'on'
+        user.is_staff = request.POST.get('is_staff') == 'on'
+        user.save()
 
-    # if staff makes themselves non-staff, they shouldn't be allowed to make more changes
-    # this doesn't seem to be working though
-    if not request.user.is_staff:
-        raise PermissionDenied
+        if user == request.user and not user.is_staff:
+            return redirect('home')
 
-    users = User.objects.all()
-    return render(request, 'manage_users.html', {'users': users})
+    user_list = User.objects.all()
+    return render(request, 'manage_users.html', {'user_list': user_list})

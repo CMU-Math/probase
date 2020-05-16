@@ -39,13 +39,13 @@ class Problem(models.Model):
 
 class Rating(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="ratings")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="ratings")
     difficulty = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
     quality = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(10)])
 
 class Comment(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="comments")
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments")
     text = models.CharField(max_length=1000) # comment text (in latex)
 
     creation_time = models.DateTimeField(auto_now_add=True) 
