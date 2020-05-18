@@ -5,6 +5,7 @@ from django import forms
 from django.core.exceptions import PermissionDenied
 from .models import Problem
 from .forms import ProblemForm, RatingForm
+from django_tex.shortcuts import render_to_pdf
 
 def home(request):
     if request.user.is_authenticated:
@@ -174,6 +175,9 @@ def edit_problem(request, problem_id):
 def create_test(request):
     if not request.user.is_staff and not request.user.is_writer and not request.user.is_solver:
         raise PermissionDenied
-    # not implemented yet
-    return render(request, 'create_test.html')
+    template_name = 'test.tex'
+    problem_list = Problem.objects.all().order_by('-creation_time')
+    context = {'solutions': True, 'problem_list' : problem_list}
+    return render_to_pdf(request, template_name, context, filename='test.pdf')
+
 

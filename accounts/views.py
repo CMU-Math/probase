@@ -19,6 +19,8 @@ def signup(request):
         form = MyUserCreationForm()
     return render(request, 'signup.html', {'form': form})
 
+
+
 @login_required
 def manage_users(request):
     if not request.user.is_staff:

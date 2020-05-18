@@ -1,0 +1,50 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsfonts, amssymb, amsmath, amsthm, enumerate, multicol, xspace, array, multirow, graphicx, bbm, etoolbox}
+\newtheorem{pproblem}{Problem}
+\newtheorem*{remark}{Remark}
+
+\theoremstyle{plain}
+\newtheorem{problem}{Problem}
+\newtheorem*{blemma}{Lemma}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{claim}{Claim}
+\newtheorem*{subclaim}{Subclaim}
+{% set lb = '{' %}
+{% set rb = '}' %}
+\setlength\parindent{0pt}
+\newbool{solutions}
+{% if solutions %}
+	    \booltrue{solutions}
+{% else %}
+	    \boolfalse{solutions}
+{% endif %}
+
+
+
+
+
+
+\newcommand{\prob}[2]{\begin{problem}[#1] #2 \end{problem}}
+\newcommand{\sln}[1]{\ifbool{solutions} {
+		#1 \\
+	} {
+		\hspace{0.4cm}
+	}}
+
+\begin{document}
+\title{CMIMC Test Test :0}
+
+\maketitle
+{% if problem_list %}
+	    {% for problem in problem_list %}
+
+			\prob { {{ problem.title }} }  { {{ problem.problem_text|linebreaks }} }
+			\sln{ {{ problem.solution }} }
+	    {% endfor %}
+{% else %}
+	    No problems selected :(
+{% endif %}
+
+\end{document}
+
