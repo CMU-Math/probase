@@ -34,13 +34,12 @@
 
 \begin{document}
 \title{CMIMC Test Test :0}
-
 \maketitle
 {% if problem_list %}
 	    {% for problem in problem_list %}
 
-			\prob { {{ problem.title }} }  { {{ problem.problem_text|linebreaks }} }
-			\sln{ {{ problem.solution }} }
+			\prob{{lb}}{{ problem.title }}{{rb}}{{lb}}{{ problem.problem_text|linebreaks }}{{rb}}
+			\sln{{lb}}{{ problem.solution }}{{rb}}
 	    {% endfor %}
 {% else %}
 	    No problems selected :(
