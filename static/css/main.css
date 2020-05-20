@@ -24,3 +24,14 @@ a.title-link {
 .card-body > p:last-child {
   margin-bottom: 0;
 }
+
+.rating-bar-container {
+  border-radius: 30px;
+  height: 16px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.rating-bar {
+  border-radius: 30px;
+}

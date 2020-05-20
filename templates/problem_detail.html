@@ -17,7 +17,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-6">
+  <div class="col-lg-8 col-xl-6">
 	<div class="card mb-4">
 	  <div class="card-body">
 		{{ problem.problem_text|linebreaks }}
@@ -28,7 +28,7 @@
 	<div class="accordion" id="accordionAnswer">
 	  <div class="card mb-4">
 		<div class="card-header">
-			<a href="#collapseAnswer" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">Answer</a>
+			<h5 class="mb-0"><a href="#collapseAnswer" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">Answer</a></h5>
 		</div>
 		<div id="collapseAnswer" class="collapse" data-parent="#accordionAnswer">
 		  <div class="card-body">
@@ -41,7 +41,7 @@
 	<div class="accordion" id="accordionSolution">
 	  <div class="card mb-4">
 		<div class="card-header">
-			<a href="#collapseSolution" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">Solution</a>
+			<h5 class="mb-0"><a href="#collapseSolution" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">Solution</a></h5>
 		</div>
 		<div id="collapseSolution" class="collapse" data-parent="#accordionSolution">
 		  <div class="card-body">
@@ -52,15 +52,73 @@
 	</div>
   </div>
 
-  <div class="col-md-6">
-    <p class="text-secondary">Subject: {{ problem.get_subject_display }}</p>
-	<hr/>
-	<p>Difficulty: {{ avg_difficulty }}</p>
-	{% if user.is_staff %}
-	  <p>Quality: {{ avg_quality }}</p>
-	{% endif %}
-	<button type="button" class="btn btn-info" data-toggle="modal" data-target="#ratingModal">Rate Problem</button>
-	<hr/>
+  <div class="col-lg-4 col-xl-6">
+	<div class="card mb-4">
+	  <div class="card-body">
+		<div class="row mb-3">
+		  {% if current_rating %}
+		    <div class="col">
+			  <span class="">Average Difficulty</span><br/>
+			  <h4>{{ problem.avg_diff_text }}</h4>
+			  <div class="row">
+			    <div class="col-auto" style="font-size: 14px;">
+			    {% for text in diff_text %}
+				  {{ text }}<br/>
+			    {% endfor %}
+			    </div>
+			    <div class="col px-0">
+			    {% for p, c in diff_percent_color %}
+				  <div class="progress rating-bar-container">
+					<div class="progress-bar rating-bar" role="progressbar" style="width: {{ p }}%; background-color: {{ c }};"></div>
+				  </div>
+			    {% endfor %}
+			    </div>
+			    <div class="col-auto" style="font-size: 14px;">
+			    {% for freq in diff_freq %}
+			      {{ freq }}<br/>
+			    {% endfor %}
+			    </div>
+			  </div>
+		    </div>
+		    {% if user.is_staff %}
+			<hr class="w-100 d-sm-none d-lg-block d-xl-none"/>
+		    <div class="col">
+			  <span class="">Should it be on the contest?</span><br/>
+			  <h4>{{ problem.avg_qual_text }}</h4>
+			  <div class="row">
+			    <div class="col-auto" style="font-size: 14px;">
+			    {% for text in qual_text %}
+				  {{ text }}<br/>
+			    {% endfor %}
+			    </div>
+			    <div class="col px-0">
+			    {% for p, c in qual_percent_color %}
+				  <div class="progress rating-bar-container">
+					<div class="progress-bar rating-bar" role="progressbar" style="width: {{ p }}%; background-color: {{ c }};"></div>
+				  </div>
+			    {% endfor %}
+			    </div>
+			    <div class="col-auto" style="font-size: 14px;">
+			    {% for freq in qual_freq %}
+			      {{ freq }}<br/>
+			    {% endfor %}
+			    </div>
+			  </div>
+			</div>
+	        {% endif %}
+		  {% else %}
+		  <div class="col">
+			You haven't rated this problem yet.
+		  </div>
+		  {% endif %}
+		</div>
+		<div class="row justify-content-center">
+	      <div class="col-auto">
+			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#ratingModal">{% if current_rating %}Change Rating{% else %}Rate Problem{% endif %}</button>
+	      </div>
+		</div>
+	  </div>
+	</div>
 	<h4>Comments</h4>
 	<p>No comments yet</p>
   </div>
@@ -96,7 +154,7 @@
 </div>
 
 <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="ratingModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="ratingModalLabel">Rate Problem</h5>
@@ -107,11 +165,83 @@
       <div class="modal-body">
 		<form method="post" id="ratingForm">
 		  {% csrf_token %}
-		  {% crispy rating_form %}
+		  <p>How difficult is this problem?</p>
+		  <div class="container mb-3">
+		    <div class="row flex-nowrap" style="overflow-x: auto;">
+			  <div class="col-auto px-0 ml-auto">
+			    <label class="pr-2">
+					<p class="mb-2">Easy - Mid AMC</p>
+				  <input type="radio" class="d-block mx-auto" value="1" {% if current_rating.difficulty == 1 %}checked{% endif %} name="diff" required>
+			    </label>
+			  </div>
+			  <div class="col-auto px-0">
+			    <label class="px-2">
+				  <p class="mb-2">Easy AIME</p>
+				  <input type="radio" class="d-block mx-auto" value="2" {% if current_rating.difficulty == 2 %}checked{% endif %} name="diff">
+			    </label>
+			  </div>
+			  <div class="col-auto px-0">
+			    <label class="px-2">
+				  <p class="mb-2">Mid AIME</p>
+				  <input type="radio" class="d-block mx-auto" value="3" {% if current_rating.difficulty == 3 %}checked{% endif %} name="diff">
+			    </label>
+			  </div>
+			  <div class="col-auto px-0">
+			    <label class="px-2">
+				  <p class="mb-2">Hard AIME</p>
+				  <input type="radio" class="d-block mx-auto" value="4" {% if current_rating.difficulty == 4 %}checked{% endif %} name="diff">
+			    </label>
+			  </div>
+			  <div class="col-auto px-0 mr-auto">
+			    <label class="pl-2">
+				  <p class="mb-2">USAMO</p>
+				  <input type="radio" class="d-block mx-auto" value="5" {% if current_rating.difficulty == 5 %}checked{% endif %} name="diff">
+			    </label>
+			  </div>
+			</div>
+		  </div>
+		  <hr/>
+
+		  <p>Should this be on the contest?</p>
+		  <div class="container">
+		    <div class="row flex-nowrap" style="overflow-x: auto;">
+			  <div class="col-auto px-0 ml-auto">
+			    <label class="pr-2">
+				  <p class="mb-2">Definitely</p>
+				  <input type="radio" class="d-block mx-auto" value="2" {% if current_rating.quality == 2 %}checked{% endif %} name="qual" required>
+			    </label>
+			  </div>
+			  <div class="col-auto px-0">
+			    <label class="px-2">
+				  <p class="mb-2">Yes</p>
+				  <input type="radio" class="d-block mx-auto" value="1" {% if current_rating.quality == 1 %}checked{% endif %} name="qual">
+			    </label>
+			  </div>
+			  <div class="col-auto px-0">
+			    <label class="px-2">
+				  <p class="mb-2">Unsure</p>
+				  <input type="radio" class="d-block mx-auto" value="0" {% if current_rating.quality == 0 %}checked{% endif %} name="qual">
+			    </label>
+			  </div>
+			  <div class="col-auto px-0">
+			    <label class="px-2">
+				  <p class="mb-2">No</p>
+				  <input type="radio" class="d-block mx-auto" value="-1" {% if current_rating.quality == -1 %}checked{% endif %} name="qual">
+			    </label>
+			  </div>
+			  <div class="col-auto px-0 mr-auto">
+			    <label class="pl-2">
+				  <p class="mb-2">Definitely not</p>
+				  <input type="radio" class="d-block mx-auto" value="-2" {% if current_rating.quality == -2 %}checked{% endif %} name="qual">
+			    </label>
+			  </div>
+			</div>
+		  </div>
 		</form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary" form="ratingForm" name="submit" value="rate">Rate</button>
+		<button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">Cancel</button>
+		<button type="submit" class="btn btn-info" form="ratingForm" name="submit" value="rate">{% if current_rating %}Save Changes{% else %}Rate{% endif %}</button>
       </div>
     </div>
   </div>

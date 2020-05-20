@@ -33,8 +33,8 @@ class ProblemForm(ModelForm):
             Field('solution', autocomplete="off"),
             FormActions(
                 Submit('submit', '{% url \'new_problem\' as url_new %}{% if request.get_full_path == url_new %}Add Problem{% else %}Save Changes{% endif %}', css_class='mx-1', formnovalidate=''),
-                Submit('preview', 'Preview', css_class='btn-info float-left mx-1', formnovalidate=''),
-                css_class='mb-5 text-left',
+                Submit('preview', 'Preview', css_class='btn-info mx-1', formnovalidate=''),
+                css_class='mb-5',
             ),
         )
 
