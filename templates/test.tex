@@ -39,7 +39,7 @@
 	    {% for problem in problem_list %}
 
 			\prob{{lb}}{{ problem.title }}{{rb}}{{lb}}{{ problem.problem_text|linebreaks }}{{rb}}
-			\sln{{lb}}{{ problem.solution }}{{rb}}
+			\sln{{lb}}{{ problem.solution|linebreaks }}{{rb}}
 	    {% endfor %}
 {% else %}
 	    No problems selected :(

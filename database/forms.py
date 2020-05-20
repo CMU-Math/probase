@@ -5,6 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.bootstrap import FormActions
 from django.template.loader import get_template
+from django.utils.text import normalize_newlines
 
 class ProblemForm(ModelForm):
     class Meta:
@@ -23,6 +24,16 @@ class ProblemForm(ModelForm):
                 'oninput': 'this.style.height = "";this.style.height = this.scrollHeight + "px"',
             }),
         }
+
+    def clean_problem_text(self):
+        data = self.cleaned_data['problem_text']
+        data = normalize_newlines(data)
+        return data
+
+    def clean_solution(self):
+        data = self.cleaned_data['solution']
+        data = normalize_newlines(data)
+        return data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -80,4 +91,4 @@ class ProblemSelect(forms.Form):
                 Field('problems'),
                 Submit('to_pdf', 'To PDF', css_class='mx-1'),
             ),
-    )
+        )
