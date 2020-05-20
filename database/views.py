@@ -3,8 +3,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.exceptions import PermissionDenied
+from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector
 from .models import Problem, Rating
-from .forms import ProblemForm, RatingForm
+from django_tex.shortcuts import render_to_pdf
 
 def home(request):
     if request.user.is_authenticated:
@@ -19,25 +20,28 @@ def home(request):
 
 @login_required
 def all_problems(request):
+    # filter/my problems and stuff should be implemented here
     if not request.user.is_solver and not request.user.is_staff:
         raise PermissionDenied
-    problem_list = Problem.objects.all().order_by('-creation_time')
-    empty_message = 'There are no problems in the database yet.'
-    return render(request, 'problem_list.html', {
-        'problem_list': problem_list,
-        'empty_message': empty_message,
-    })
+    if request.method == 'POST':
+        if "to_pdf" in request.POST:
+            #submission = ProblemSelect(request.POST)
+            template_name = 'test.tex'
+            problem_list = Problem.objects.filter(id__in=request.POST.getlist('problems')).order_by('-creation_time')
+            context = {'solutions': True, 'problem_list' : problem_list}
+            return render_to_pdf(request, template_name, context, filename='test.pdf')
+        elif "filter" in request.POST:
+            print("")
+    else: 
+        problem_list = Problem.objects.all().order_by('-creation_time')
+        empty_message = 'There are no problems in the database yet.'
 
-@login_required
-def my_problems(request):
-    if not request.user.is_writer and not request.user.is_staff:
-        raise PermissionDenied
-    problem_list = Problem.objects.filter(author=request.user).order_by('-creation_time')
-    empty_message = "You haven't submitted any problems yet."
-    return render(request, 'problem_list.html', {
-        'problem_list': problem_list,
-        'empty_message': empty_message,
-    })
+        context = {
+            'filter': 0,
+            'form': ProblemSelect(problems=problem_list),
+            'empty_message': empty_message,
+        }
+        return render(request, 'problem_list.html', context)
 
 @login_required
 def problem_detail(request, problem_id):
@@ -45,7 +49,6 @@ def problem_detail(request, problem_id):
     if not request.user.is_solver and not request.user.is_staff and request.user != problem.author:
         raise PermissionDenied
     if request.method == 'POST':
-        print(request.POST)
         assert request.POST.get('submit')
         if request.POST['submit'] == 'delete':
             problem.delete()
@@ -155,10 +158,4 @@ def edit_problem(request, problem_id):
         form = ProblemForm(instance=problem)
         return render(request, 'make_problem.html', {'form': form })
 
-@login_required
-def create_test(request):
-    if not request.user.is_staff and not request.user.is_writer and not request.user.is_solver:
-        raise PermissionDenied
-    # not implemented yet
-    return render(request, 'create_test.html')
 

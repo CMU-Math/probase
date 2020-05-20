@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'database',
     'accounts',
     'crispy_forms',
+    'django_tex',
 ]
 
 MIDDLEWARE = [
@@ -69,6 +70,15 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+    },
+    {
+        'NAME': 'tex',
+        'BACKEND': 'django_tex.engine.TeXEngine', 
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates')
+        ],
+
+        'APP_DIRS': True,
     },
 ]
 

@@ -1,8 +1,10 @@
-from django.forms import ModelForm, Textarea, TextInput, NumberInput
+from django import forms
+from django.forms import ModelForm, Textarea, TextInput, NumberInput, ModelMultipleChoiceField, CheckboxSelectMultiple
 from .models import Problem, Rating
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.bootstrap import FormActions
+from django.template.loader import get_template
 
 class ProblemForm(ModelForm):
     class Meta:
@@ -62,3 +64,20 @@ class RatingForm(ModelForm):
             Field('quality'),
         )
 
+class ProblemSelector(ModelMultipleChoiceField):
+    def label_from_instance(self, prob):
+        return get_template('prob_card.html').render({'problem': prob})
+
+class ProblemSelect(forms.Form):
+    problems = ProblemSelector(widget=CheckboxSelectMultiple(), queryset=None)
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        if 'problems' in kwargs:
+            self.fields['problems'].queryset = kwargs['problems']
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            FormActions(
+                Field('problems'),
+                Submit('to_pdf', 'To PDF', css_class='mx-1'),
+            ),
+    )
