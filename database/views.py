@@ -3,8 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.exceptions import PermissionDenied
-from .models import Problem
 from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector
+from .models import Problem, Rating
 from django_tex.shortcuts import render_to_pdf
 
 def home(request):
@@ -56,42 +56,27 @@ def problem_detail(request, problem_id):
         elif request.POST['submit'] == 'rate':
             old_rating = problem.ratings.filter(user=request.user).first()
             if old_rating:
-                form = RatingForm(request.POST, instance=old_rating)
-                if form.is_valid():
-                    form.save()
-                else: # need to continue showing errors in modal
-                    return render(request, 'problem_detail.html', {
-                        'problem': problem,
-                        'avg_difficulty': problem.avg_difficulty(),
-                        'avg_quality': problem.avg_quality(),
-                        'rating_form': form,
-                    })
-            else:
-                form = RatingForm(request.POST)
-                if form.is_valid():
-                    rating = form.save(commit=False)
-                    rating.problem = problem
-                    rating.user = request.user
-                    rating.save()
-                else: # need to continue showing errors in modal
-                    return render(request, 'problem_detail.html', {
-                        'problem': problem,
-                        'avg_difficulty': problem.avg_difficulty(),
-                        'avg_quality': problem.avg_quality(),
-                        'rating_form': form,
-                    })
+                old_rating.delete()
+            diff = int(request.POST['diff'])
+            qual = int(request.POST['qual'])
+            new_rating = Rating(problem=problem, user=request.user, difficulty=diff, quality=qual)
+            new_rating.save()
         else:
             assert False, "invalid submit"
-    rating = problem.ratings.filter(user=request.user).first()
-    if rating:
-        rating_form = RatingForm(instance=rating)
-    else:
-        rating_form = RatingForm()
+
+    current_rating = problem.ratings.filter(user=request.user).first()
+    diff_freq, diff_percent = problem.diff_distribution()
+    qual_freq, qual_percent = problem.qual_distribution()
+
     return render(request, 'problem_detail.html', {
         'problem': problem,
-        'avg_difficulty': problem.avg_difficulty(),
-        'avg_quality': problem.avg_quality(),
-        'rating_form': rating_form,
+        'current_rating': current_rating,
+        'diff_text': Rating.DIFF.values(),
+        'diff_freq': diff_freq,
+        'diff_percent_color': [(diff_percent[i], Rating.COLORS[i]) for i in range(5)],
+        'qual_text': Rating.QUAL.values(),
+        'qual_freq': qual_freq,
+        'qual_percent_color': [(qual_percent[i], Rating.COLORS[i]) for i in range(5)],
     })
 
 @login_required
