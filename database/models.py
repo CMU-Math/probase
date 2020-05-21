@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Avg, Sum
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
+from taggit.managers import TaggableManager
 
 class Problem(models.Model):
     title = models.CharField(max_length=100, unique=True)
@@ -25,6 +26,7 @@ class Problem(models.Model):
 
     update_time = models.DateTimeField(null=True) # time of last update
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, related_name="+") # user who last updated it
+    tags = TaggableManager()
 
     def __str__(self):
         return self.title
@@ -73,6 +75,12 @@ class Problem(models.Model):
         qual = [self.ratings.filter(quality=q).count() for q in Rating.QUAL]
         m = max(qual) + 0.00001 # in case there are no ratings
         return qual, [round(i/m*100) for i in qual]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related('tags')
+
+    def tag_list_text(self):
+        return u", ".join(o.name for o in self.tags.all())
 
 
 class Rating(models.Model):

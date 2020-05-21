@@ -6,6 +6,9 @@ from django.core.exceptions import PermissionDenied
 from .models import Problem, Rating
 from .forms import ProblemForm, RatingForm
 
+from taggit.models import Tag
+
+
 def home(request):
     if request.user.is_authenticated:
         if request.user.is_solver or request.user.is_staff:
@@ -85,6 +88,7 @@ def new_problem(request):
             'preview': True,
             'subject': request.POST['subject'],
             'title': request.POST['title'],
+            'tags': request.POST['tags'],
             'problem_text': request.POST['problem_text'],
             'answer': request.POST['answer'],
             'solution': request.POST['solution'],
@@ -100,6 +104,7 @@ def new_problem(request):
                 problem = form.save(commit=False)
                 problem.author = request.user
                 problem.save()
+                form.save_m2m()
                 return redirect('problem_detail', problem_id=problem.id)
             else:
                 # if currently showing preview, continue to show preview
