@@ -5,6 +5,10 @@ from django import forms
 from django.core.exceptions import PermissionDenied
 from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector
 from .models import Problem, Rating
+
+
+import json
+from django.core.serializers.json import DjangoJSONEncoder
 from django_tex.shortcuts import render_to_pdf
 
 def home(request):
@@ -24,21 +28,18 @@ def all_problems(request):
     if not request.user.is_solver and not request.user.is_staff:
         raise PermissionDenied
     if request.method == 'POST':
-        if "to_pdf" in request.POST:
-            #submission = ProblemSelect(request.POST)
-            template_name = 'test.tex'
-            problem_list = Problem.objects.filter(id__in=request.POST.getlist('problems')).order_by('-creation_time')
-            context = {'solutions': True, 'problem_list' : problem_list}
-            return render_to_pdf(request, template_name, context, filename='test.pdf')
-        elif "filter" in request.POST:
-            print("")
+        problem_list = [Problem(**temp) for temp in json.loads(request.POST['problem_list'])]
+        template_name = 'test.tex'
+        context = {'solutions': True, 'problem_list' : problem_list}
+        return render_to_pdf([], template_name, context, filename='test.pdf')
     else: 
         problem_list = Problem.objects.all().order_by('-creation_time')
         empty_message = 'There are no problems in the database yet.'
 
         context = {
             'filter': 0,
-            'form': ProblemSelect(problems=problem_list),
+            'form': ProblemSelect(),
+            'data': json.dumps(list(Problem.objects.values().order_by('-creation_time')), cls = DjangoJSONEncoder),
             'empty_message': empty_message,
         }
         return render(request, 'problem_list.html', context)
@@ -157,5 +158,4 @@ def edit_problem(request, problem_id):
     else:
         form = ProblemForm(instance=problem)
         return render(request, 'make_problem.html', {'form': form })
-
 

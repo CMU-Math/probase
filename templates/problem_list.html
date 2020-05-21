@@ -2,6 +2,74 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+<script>
+	data = {{ data|safe }};
+	$(document).ready( function () {
+    	$('#problems').DataTable({
+			data: data,
+			orderFixed: [],
+			select: {
+			},
+			rowReorder: {
+				dataSrc: 'id'
+			},
+			columns: [
+				{ data: 'id', orderable: false },
+				{ data: 'subject', orderable: false},
+				{ data: 'title', orderable: false },
+				{ data: 'problem_text', orderable: false },
+				{ data: 'solution', orderable: false }
+			],
+			searchPanes: {
+				displayColumns: 2
+			},
+			dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
+				"<'row'<'col-lg-4'P><'col-lg-8'tr>>" +
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
+				/*
+			buttons: [
+				{
+					action: function ( e, dt, node, config ) {
+                		var selected = {problem_list: JSON.stringify(dt.rows( { selected: true } ).data().toArray())};
+						var pdf = $.ajax({
+							url: window.location,
+							data : selected,
+							method : 'POST',
+							headers: {'X-CSRFToken': '{{ csrf_token }}'},
+							success: function (data) { 
+								var blob=data;
+								var link=document.createElement('a');
+								link.href=window.URL.createObjectURL(blob);
+								link.download="test.pdf";
+								link.click();
+				
+							},
+							error: function (data) { 
+								var w = window.open('about:blank');
+								w.document.open();
+								w.document.write(data.responseText);
+								w.document.close(); 
+							}
+						});
+						//var pdf = $.post( window.location, selected);
+						
+            		},
+            		extend: 'selected',
+            		text: 'Export to PDF'
+        		}
+			]
+			*/
+		});
+		var dt = $('#problems').DataTable();
+		$('#problems').on( 'select.dt', function () {
+			$('#id_problem_list').val(JSON.stringify(dt.rows( { selected: true } ).data().toArray()));
+		} );
+		$('#problems').on( 'deselect.dt', function () {
+			$('#id_problem_list').val(JSON.stringify(dt.rows( { selected: true } ).data().toArray()));
+		} );
+		MathJax.typeset()
+	} );
+</script>
 <div class="row mb-3">
 	<div class="col">
 		<h2>
@@ -22,21 +90,31 @@
 	{% endif %}
 </div>
 
-<div class="row">
-	<div class="col-md-4">
-		Search and Filter (not implemented yet)
-	</div>
-	<div class="col-md-8">
+       <table id="problems" class="table table-striped table-bordered" style="width:100%">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Title</th>
+                <th>Problem</th>
+                <th>Solution</th>
+            </tr>
+		</thead>
+		<tbody>
+		</tbody>
+        <tfoot>
+            <tr>
+                <th>#</th>
+                <th>Subject</th>
+                <th>Title</th>
+                <th>Problem</th>
+                <th>Solution</th>
+            </tr>
+		</tfoot>
+		
+	</table> 
 
-		<div class="card-deck-wrapper">
-			<form method="post">
-				{% csrf_token %}
-				{% crispy form 	%}
-			</form>
-		</div>
-	</div>
-</div>
+		{% crispy form 	%}
 
-</div>
 
 {% endblock %}
