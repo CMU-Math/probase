@@ -78,17 +78,28 @@ class RatingForm(ModelForm):
 class ProblemSelector(ModelMultipleChoiceField):
     def label_from_instance(self, prob):
         return get_template('prob_card.html').render({'problem': prob})
-
+#
+#class ProblemSelect(forms.Form):
+#    problems = ProblemSelector(widget=CheckboxSelectMultiple(), queryset=None)
+#    def __init__(self, *args, **kwargs):
+#        super().__init__()
+#        if 'problems' in kwargs:
+#            self.fields['problems'].queryset = kwargs['problems']
+#        self.helper = FormHelper()
+#        self.helper.layout = Layout(
+#            FormActions(
+#                Field('problems'),
+#                Submit('to_pdf', 'To PDF', css_class='mx-1'),
+#            ),
+#        )
 class ProblemSelect(forms.Form):
-    problems = ProblemSelector(widget=CheckboxSelectMultiple(), queryset=None)
+    problem_list = forms.CharField()
     def __init__(self, *args, **kwargs):
-        super().__init__()
-        if 'problems' in kwargs:
-            self.fields['problems'].queryset = kwargs['problems']
+        super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.attrs={'id': 'selected_problems'}
         self.helper.layout = Layout(
             FormActions(
-                Field('problems'),
-                Submit('to_pdf', 'To PDF', css_class='mx-1'),
+                Field('problem_list', type="hidden")
             ),
         )
