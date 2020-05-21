@@ -97,9 +97,9 @@ class ProblemSelect(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.attrs={'id': 'selected_problems'}
         self.helper.layout = Layout(
             FormActions(
-                Field('problem_list', type="hidden"),
-                Submit('to_pdf', 'To PDF', css_class='mx-1'),
+                Field('problem_list', type="hidden")
             ),
         )

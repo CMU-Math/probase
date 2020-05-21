@@ -25,11 +25,15 @@
 			},
 			dom: "<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
 				"<'row'<'col-lg-4'P><'col-lg-8'tr>>" +
-				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>"
-				/*
+				"<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>" + 
+				"<'row'B>",
 			buttons: [
 				{
 					action: function ( e, dt, node, config ) {
+
+						$('#id_problem_list').val(JSON.stringify(dt.rows( { selected: true } ).data().toArray()));
+						$('#selected_problems').submit();
+						/*
                 		var selected = {problem_list: JSON.stringify(dt.rows( { selected: true } ).data().toArray())};
 						var pdf = $.ajax({
 							url: window.location,
@@ -51,22 +55,20 @@
 								w.document.close(); 
 							}
 						});
-						//var pdf = $.post( window.location, selected);
+						*/
 						
             		},
             		extend: 'selected',
             		text: 'Export to PDF'
         		}
 			]
-			*/
 		});
 		var dt = $('#problems').DataTable();
-		$('#problems').on( 'select.dt', function () {
+		/*
+		$('#submit-id-to_pdf').submit(function () {
 			$('#id_problem_list').val(JSON.stringify(dt.rows( { selected: true } ).data().toArray()));
 		} );
-		$('#problems').on( 'deselect.dt', function () {
-			$('#id_problem_list').val(JSON.stringify(dt.rows( { selected: true } ).data().toArray()));
-		} );
+		*/
 		MathJax.typeset()
 	} );
 </script>
@@ -114,7 +116,7 @@
 		
 	</table> 
 
-		{% crispy form 	%}
+		{% crispy form %}
 
 
 {% endblock %}
