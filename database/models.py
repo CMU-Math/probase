@@ -76,9 +76,6 @@ class Problem(models.Model):
         m = max(qual) + 0.00001 # in case there are no ratings
         return qual, [round(i/m*100) for i in qual]
 
-    def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related('tags')
-
     def tag_list_text(self):
         return u", ".join(o.name for o in self.tags.all())
 
