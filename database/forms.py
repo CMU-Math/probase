@@ -77,7 +77,7 @@ class RatingForm(ModelForm):
 
 class ProblemSelector(ModelMultipleChoiceField):
     def label_from_instance(self, prob):
-        return get_template('prob_card.html').render({'problem': prob})
+        return get_template('includes/problem_card.html').render({'problem': prob})
 
 class ProblemSelect(forms.Form):
     problems = ProblemSelector(widget=CheckboxSelectMultiple(), queryset=None)

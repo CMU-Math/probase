@@ -8,14 +8,14 @@ from accounts import views as account_views
 urlpatterns = [
     path('', views.home, name='home'),
     path('all/', views.all_problems, name='all_problems'),
-    #path('mine/', views.my_problems, name='my_problems'),
+    path('mine/', views.my_problems, name='my_problems'),
 
     path('new/', views.new_problem, name='new_problem'),
     path('problem/<int:problem_id>/', views.problem_detail, name='problem_detail'),
     path('problem/<int:problem_id>/edit/', views.edit_problem, name='edit_problem'),
 
     path('manage-users/', account_views.manage_users, name='manage_users'),
-#    path('create-test/', views.create_test, name='create_test'),
+    path('create-test/', views.create_test, name='create_test'),
 
     path('signup/', account_views.signup, name='signup'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),

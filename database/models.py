@@ -112,7 +112,8 @@ class Rating(models.Model):
 class Comment(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments")
-    text = models.CharField(max_length=1000) # comment text (in latex)
+    text = models.CharField(max_length=500) # comment text (in html)
+    # max_length of comment text isn't actually enforced
 
     creation_time = models.DateTimeField(auto_now_add=True) 
     update_time = models.DateTimeField(null=True) # time of last update

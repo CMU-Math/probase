@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load crispy_forms_tags %}
+{% load humanize %}
 
 {% block content %}
 <div class="row mb-3">
@@ -17,7 +18,7 @@
 </div>
 
 <div class="row">
-  <div class="col-lg-8 col-xl-6">
+  <div class="col-lg-7 col-xl-6">
 	<div class="card mb-4">
 	  <div class="card-body">
 		{{ problem.problem_text|linebreaks }}
@@ -52,7 +53,7 @@
 	</div>
   </div>
 
-  <div class="col-lg-4 col-xl-6">
+  <div class="col-lg-5 col-xl-6">
 	<div class="card mb-4">
 	  <div class="card-body">
 		<div class="row mb-3">
@@ -119,8 +120,52 @@
 		</div>
 	  </div>
 	</div>
-	<h4>Comments</h4>
+
+    <h3>Comments</h3>
+    {% if comment_list %}
+      {% for comment in comment_list %}
+        <div class="mb-3" id="comment{{ comment.id }}">
+          <div class="row">
+            <div class="col mb-2">
+              <span class="font-weight-bold">{{ comment.author }}</span> <span class="text-muted">{{ comment.creation_time|naturaltime }}</span>
+              <a href="#" onclick="toggleForm({{ comment.id }}); return false;" class="text-muted float-right">Edit</a>
+            </div>
+          </div>
+          {{ comment.text|safe }}
+        </div>
+        <div class="mb-3" id="editFormContainer{{ comment.id }}" style="display: none;">
+          <form method="post" id="editForm{{ comment.id }}">
+            {% csrf_token %}
+            <div class="mb-3" id="editor{{ comment.id }}" style="height: 200px;">
+              {{ comment.text|safe }}
+            </div>
+            <textarea class="d-none" name="text" id="hiddenArea{{ comment.id }}"></textarea>
+            <input type="hidden" name="commentID" value="{{ comment.id }}">
+
+            <button type="button" class="btn btn-secondary" onclick="toggleForm({{ comment.id }})">Cancel</button>
+            <button type="submit" name="submit" class="btn btn-primary float-right" value="editComment">Save Changes</button>
+          </form>
+        </div>
+        <hr/>
+      {% endfor %}
+    {% else %}
 	<p>No comments yet</p>
+    {% endif %}
+
+    <div id="commentNew">
+      <button type="button" class="btn btn-primary" onclick="toggleForm('New')">Add Comment</button>
+    </div>
+
+    <div id="editFormContainerNew" style="display: none;">
+      <form method="post" id="editFormNew">
+        {% csrf_token %}
+        <div class="mb-3" id="editorNew" style="height: 200px;"></div>
+        <textarea class="d-none" name="text" id="hiddenAreaNew"></textarea>
+
+        <button type="button" class="btn btn-secondary" onclick="toggleForm('New')">Cancel</button>
+        <button type="submit" name="submit" class="btn btn-primary float-right" value="newComment">Add Comment</button>
+      </form>
+    </div>
   </div>
 </div>
 
@@ -246,4 +291,34 @@
     </div>
   </div>
 </div>
+
+<script>
+var quills = {
+    {% for comment in comment_list %}
+    {{ comment.id }}: new Quill("#editor{{ comment.id }}", { theme: "snow" }),
+    {% endfor %}
+    "New": new Quill("#editorNew", { theme: "snow" }),
+};
+
+$(function() {
+    for (const id in quills) {
+        $("#editForm" + id).on("submit", function(){
+            $("#hiddenArea" + id).val(quills[id].container.querySelector('.ql-editor').innerHTML);
+        })
+    }
+});
+
+function toggleForm(id) {
+    var comment = document.getElementById("comment" + id);
+    var editor = document.getElementById("editFormContainer" + id);
+    if (editor.style.display == "none") {
+        comment.style.display = "none";
+        editor.style.display = "block";
+    } else {
+        comment.style.display = "block";
+        editor.style.display = "none";
+    }
+}
+</script>
+
 {% endblock %}

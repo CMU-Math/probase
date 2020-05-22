@@ -23,20 +23,20 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4">
-    Search and Filter (not implemented yet)
-  </div>
-  <div class="col-md-8">
-	<div class="card-deck-wrapper">
-	  {% if problem_list %}
-	    {% for problem in problem_list %}
-		  {% include 'includes/problem_card.html' %}
-	    {% endfor %}
-	  {% else %}
-	    {{ empty_message }}
-	  {% endif %}
+	<div class="col-md-4">
+		Search and Filter (not implemented yet)
 	</div>
-  </div>
+	<div class="col-md-8">
+
+		<div class="card-deck-wrapper">
+			<form method="post">
+				{% csrf_token %}
+				{% crispy form 	%}
+			</form>
+		</div>
+	</div>
+</div>
+
 </div>
 
 {% endblock %}
