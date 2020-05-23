@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'database',
     'accounts',
     'crispy_forms',
+    'taggit',
     'django_tex',
     'django.contrib.humanize',
 ]

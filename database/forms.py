@@ -10,7 +10,7 @@ from django.utils.text import normalize_newlines
 class ProblemForm(ModelForm):
     class Meta:
         model = Problem
-        fields = ('subject', 'title', 'problem_text', 'answer', 'solution')
+        fields = ('subject', 'title', 'tags', 'problem_text', 'answer', 'solution')
         labels = {
             'problem_text': 'Problem'
         }
@@ -41,6 +41,7 @@ class ProblemForm(ModelForm):
         self.helper.layout = Layout(
             Field('subject', css_class="custom-select"),
             Field('title', autocomplete="off"),
+            Field('tags'),
             Field('problem_text', autocomplete="off"),
             Field('answer', autocomplete="off"),
             Field('solution', autocomplete="off"),

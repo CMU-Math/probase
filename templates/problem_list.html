@@ -30,7 +30,7 @@
 	<div class="card-deck-wrapper">
 	  {% if problem_list %}
 	    {% for problem in problem_list %}
-		  {% include 'includes/problem_card.html' %}
+		    {% include 'includes/problem_card.html' %}
 	    {% endfor %}
 	  {% else %}
 	    {{ empty_message }}
