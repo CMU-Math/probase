@@ -3,56 +3,6 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
-<script>
-var context = {
-{% for u in user_list %}
-  {{ u.id }}: {
-    'is_writer': {{ u.is_writer|lower }},
-    'is_solver': {{ u.is_solver|lower }},
-    'is_staff': {{ u.is_staff|lower }},
-  },
-{% endfor %}
-};
-</script>
-
-<script>
-function enableButton(id) {
-  var button = document.getElementById("save" + id);
-  var writer = document.getElementById("writer" + id);
-  var solver = document.getElementById("solver" + id);
-  var staff = document.getElementById("staff" + id);
-  if (writer.checked == context[id]['is_writer'] && solver.checked == context[id]['is_solver'] && staff.checked == context[id]['is_staff']) {
-	button.disabled = true;
-	button.style.pointerEvents = "none";
-	$('#tooltip' + id).tooltip('enable');
-  } else {
-	button.disabled = false;
-	button.style.pointerEvents = "auto";
-	$('#tooltip' + id).tooltip('disable');
-  }
-};
-</script>
-
-<script>
-$(document).ready(function() {
-  for (var id of Object.keys(context)) {
-	enableButton(id);
-  }
-});
-</script>
-
-<script>
-function submitOrModal(id) {
-  var staff = document.getElementById("staff" + id);
-  if (context[id]['is_staff'] && !staff.checked) {
-	$('#selfNonStaffModal').modal('show');
-  } else {
-	document.getElementById("form" + id).submit();
-  }
-};
-</script>
-
 <div class="accordion" id="accordion">
   {% for u in user_list %}
     <div class="card">
@@ -124,5 +74,47 @@ function submitOrModal(id) {
   </div>
 </div>
 
+<script>
+var context = {
+{% for u in user_list %}
+  {{ u.id }}: {
+    'is_writer': {{ u.is_writer|lower }},
+    'is_solver': {{ u.is_solver|lower }},
+    'is_staff': {{ u.is_staff|lower }},
+  },
+{% endfor %}
+};
+
+function enableButton(id) {
+    var button = document.getElementById("save" + id);
+    var writer = document.getElementById("writer" + id);
+    var solver = document.getElementById("solver" + id);
+    var staff = document.getElementById("staff" + id);
+    if (writer.checked == context[id]['is_writer'] && solver.checked == context[id]['is_solver'] && staff.checked == context[id]['is_staff']) {
+        button.disabled = true;
+        button.style.pointerEvents = "none";
+        $('#tooltip' + id).tooltip('enable');
+    } else {
+        button.disabled = false;
+        button.style.pointerEvents = "auto";
+        $('#tooltip' + id).tooltip('disable');
+    }
+}
+
+$(document).ready(function() {
+  for (var id of Object.keys(context)) {
+	enableButton(id);
+  }
+})
+
+function submitOrModal(id) {
+  var staff = document.getElementById("staff" + id);
+  if (context[id]['is_staff'] && !staff.checked) {
+	$('#selfNonStaffModal').modal('show');
+  } else {
+	document.getElementById("form" + id).submit();
+  }
+}
+</script>
 
 {% endblock %}

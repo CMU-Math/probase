@@ -1,8 +1,11 @@
-from django.forms import ModelForm, Textarea, TextInput, NumberInput
+from django import forms
+from django.forms import ModelForm, Textarea, TextInput, NumberInput, ModelMultipleChoiceField, CheckboxSelectMultiple
 from .models import Problem, Rating
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.bootstrap import FormActions
+from django.template.loader import get_template
+from django.utils.text import normalize_newlines
 
 class ProblemForm(ModelForm):
     class Meta:
@@ -21,6 +24,16 @@ class ProblemForm(ModelForm):
                 'oninput': 'this.style.height = "";this.style.height = this.scrollHeight + "px"',
             }),
         }
+
+    def clean_problem_text(self):
+        data = self.cleaned_data['problem_text']
+        data = normalize_newlines(data)
+        return data
+
+    def clean_solution(self):
+        data = self.cleaned_data['solution']
+        data = normalize_newlines(data)
+        return data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -63,3 +76,20 @@ class RatingForm(ModelForm):
             Field('quality'),
         )
 
+class ProblemSelector(ModelMultipleChoiceField):
+    def label_from_instance(self, prob):
+        return get_template('includes/problem_card.html').render({'problem': prob})
+
+class ProblemSelect(forms.Form):
+    problems = ProblemSelector(widget=CheckboxSelectMultiple(), queryset=None)
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        if 'problems' in kwargs:
+            self.fields['problems'].queryset = kwargs['problems']
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            FormActions(
+                Field('problems'),
+                Submit('to_pdf', 'To PDF', css_class='mx-1'),
+            ),
+        )

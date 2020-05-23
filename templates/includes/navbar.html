@@ -27,11 +27,12 @@
 			  <a class="nav-link {% if request.get_full_path == url_manage %}active{% endif %}" href="{% url 'manage_users' %}">Manage Users</a>
 		    </li>
 		  {% endif %}
-		  {% if user.is_staff or user.is_solver or user.is_writer %}
+		  {% if user.is_staff %}
 		    <li class="nav-item">
 			  <a class="nav-link {% if request.get_full_path == url_create %}active{% endif %}" href="{% url 'create_test' %}">Create Test</a>
 		    </li>
 		  {% endif %}
+		</ul>
 		</ul>
 
 		<ul class="navbar-nav ml-auto">
