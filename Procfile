@@ -1,1 +1,1 @@
-web: gunicorn probase.wsgi
+web: gunicorn probase.wsgi --log-file -
