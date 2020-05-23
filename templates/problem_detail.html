@@ -2,11 +2,12 @@
 
 {% load crispy_forms_tags %}
 {% load humanize %}
+{% load my_filters %}
 
 {% block content %}
 <div class="row mb-3">
   <div class="col">
-    <h2>{{ problem.title }}</h2>
+    <h2>{{ problem.title|escapedollars }}</h2>
   </div>
   {% if user.is_staff or user == problem.author %}
     <div class="col-auto">
@@ -21,18 +22,12 @@
   <div class="col-lg-7 col-xl-6">
 	<div class="card mb-4">
 	  <div class="card-body">
-		{{ problem.problem_text|linebreaks }}
+        {{ problem.problem_text|linebreaks }}
 		<p class="card-text text-muted text-right">Proposed by {{ problem.author }}</p>
 	  </div>
 	</div>
 
-	<div class="card mb-4">
-		<h5 class="mb-0">Tags</h5>
-		<div class="card-body">
-		  {{ problem.tag_list_text|linebreaks }}
-		</div>
-	  </div>
-
+    {% if problem.answer %}
 	<div class="accordion" id="accordionAnswer">
 	  <div class="card mb-4">
 		<div class="card-header">
@@ -45,7 +40,9 @@
 		</div>
 	  </div>
 	</div>
+    {% endif %}
 
+    {% if problem.solution %}
 	<div class="accordion" id="accordionSolution">
 	  <div class="card mb-4">
 		<div class="card-header">
@@ -58,6 +55,7 @@
 		</div>
 	  </div>
 	</div>
+    {% endif %}
   </div>
 
   <div class="col-lg-5 col-xl-6">
@@ -128,14 +126,21 @@
 	  </div>
 	</div>
 
+    {% if problem.tag_list_text %}
+    <div class="mb-4">
+      <h4>Tags</h4>
+      {{ problem.tag_list_text|escapedollars }}
+    </div>
+    {% endif %}
+
     <h3>Comments</h3>
     {% if comment_list %}
       {% for comment in comment_list %}
-        <div class="mb-3" id="comment{{ comment.id }}">
+        <div class="comment mb-3" id="comment{{ comment.id }}">
           <div class="row">
             <div class="col mb-2">
               <span class="font-weight-bold">{{ comment.author }}</span> <span class="text-muted">{{ comment.creation_time|naturaltime }}</span>
-              <a href="#" onclick="toggleForm({{ comment.id }}); return false;" class="text-muted float-right">Edit</a>
+              {% if user == comment.author or user.is_staff %}<a href="#" onclick="toggleForm({{ comment.id }}); return false;" class="text-muted float-right">Edit</a>{% endif %}
             </div>
           </div>
           {{ comment.text|safe }}
@@ -144,7 +149,7 @@
           <form method="post" id="editForm{{ comment.id }}">
             {% csrf_token %}
             <div class="mb-3" id="editor{{ comment.id }}" style="height: 200px;">
-              {{ comment.text|safe }}
+              {{ comment.text|safe|escapedollars }}
             </div>
             <textarea class="d-none" name="text" id="hiddenArea{{ comment.id }}"></textarea>
             <input type="hidden" name="commentID" value="{{ comment.id }}">

@@ -1,8 +1,10 @@
-<div class="card">
+{% load my_filters %}
+
+<div class="card cardlink mb-4">
   <div class="card-body">
     <h4 class="card-title">
-      <a href="{% url 'problem_detail' problem.id %}" class="stretched-link title-link">
-        {{ problem.title }}
+      <a href="{% url 'problem_detail' problem.id %}" class="stretched-link text-reset text-decoration-none">
+        {{ problem.title|escapedollars }}
       </a>
     </h4>
     {{ problem.problem_text|linebreaks }}

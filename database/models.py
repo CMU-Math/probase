@@ -8,6 +8,14 @@ class Problem(models.Model):
     title = models.CharField(max_length=100, unique=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="problems")
     creation_time = models.DateTimeField(auto_now_add=True)
+
+    problem_text = models.CharField(max_length=1000) # problem (in latex)
+    answer = models.CharField(max_length=100, blank=True) # answer (in latex)
+    solution = models.CharField(max_length=2000, blank=True) # solution (in latex)
+
+    update_time = models.DateTimeField(blank=True, null=True) # time of last update
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True, related_name="+") # user who last updated it
+    tags = TaggableManager(blank=True)
     subject = models.CharField(
         max_length = 5,
         choices = [
@@ -19,14 +27,6 @@ class Problem(models.Model):
             ('cs', 'Computer Science'),
             ('other', 'Other'),
         ])
-
-    problem_text = models.CharField(max_length=1000) # problem (in latex)
-    answer = models.CharField(max_length=100) # answer (in latex)
-    solution = models.CharField(max_length=2000) # solution (in latex)
-
-    update_time = models.DateTimeField(null=True) # time of last update
-    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, related_name="+") # user who last updated it
-    tags = TaggableManager()
 
     def __str__(self):
         return self.title
@@ -117,9 +117,9 @@ class Rating(models.Model):
 class Comment(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, related_name="comments")
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments")
-    text = models.CharField(max_length=500) # comment text (in html)
+    text = models.CharField(max_length=1000) # comment text (in html)
     # max_length of comment text isn't actually enforced
 
     creation_time = models.DateTimeField(auto_now_add=True) 
-    update_time = models.DateTimeField(null=True) # time of last update
-    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, related_name="+") # user who last updated it
+    update_time = models.DateTimeField(blank=True, null=True) # time of last update
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True, related_name="+") # user who last updated it

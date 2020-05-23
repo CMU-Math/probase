@@ -1,37 +1,43 @@
 /* Django crispy forms: hide asterisk for required fields because all fields are required */
-.asteriskField {
-    display: none;
-}
 
-a.title-link {
-  color: black;
+.asteriskField {
+    /*display: none;*/
+    color: #dc3545;
 }
 
 .btn-round {
-  border-radius: 50px;
+    border-radius: 50px;
 }
 
 .icon-left {
-  margin-left: 0.7rem;
+    margin-left: 0.7rem;
 }
 
 @media (min-width: 576px) {
-  .form-horizontal .col-form-label {
-	text-align: right;
-  }
+    .form-horizontal .col-form-label {
+        text-align: right;
+    }
 }
 
 .card-body > p:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .rating-bar-container {
-  border-radius: 30px;
-  height: 16px;
-  margin-top: 4px;
-  margin-bottom: 4px;
+    border-radius: 30px;
+    height: 16px;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 
 .rating-bar {
-  border-radius: 30px;
+    border-radius: 30px;
+}
+
+.comment > p {
+    margin-bottom: 0;
+}
+
+.cardlink:hover {
+    box-shadow: 0 0.3rem 0.6rem rgba(0,0,0,.1);
 }

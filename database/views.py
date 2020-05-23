@@ -95,6 +95,7 @@ def new_problem(request):
     if not request.user.is_writer and not request.user.is_staff:
         raise PermissionDenied
     if request.method == 'POST':
+        print(request.POST)
         data = {
             'preview': True,
             'subject': request.POST['subject'],
@@ -135,6 +136,7 @@ def edit_problem(request, problem_id):
     if request.user != problem.author and not request.user.is_staff:
         raise PermissionDenied
     if request.method == 'POST':
+        print(request.POST)
         data = {
             'preview': True,
             'title': request.POST['title'],
@@ -148,8 +150,6 @@ def edit_problem(request, problem_id):
         if request.POST.get('cancel'):
             return redirect('problem_detail', problem_id=problem_id)
         elif request.POST.get('preview'):
-            print('preview')
-            print(data['problem_text'])
             form = ProblemForm(initial=data)
             data['form'] = form
             return render(request, 'make_problem.html', data)
