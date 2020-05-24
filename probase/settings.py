@@ -19,7 +19,10 @@ SECRET_KEY = '@hma)5tm@n)x8^t87u&&r=!0jjh1z@cde#9dhkdnr=^hu82ga%' # this key is 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = ['cmimc-probase.herokuapp.com']
 
 
 # Application definition
@@ -158,13 +161,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 # must be at the end of the settings file (except for the line after)
-# configures DATABASE_URL, ALLOWED_HOSTS, SECRET_KEY, and more
-django_heroku.settings(locals())
+# configures DATABASE_URL, SECRET_KEY, static files, and more
+django_heroku.settings(locals(), allowed_hosts=False)
 
 # https://blog.usejournal.com/deploying-django-to-heroku-connecting-heroku-postgres-fcc960d290d1
 del DATABASES['default']['OPTIONS']['sslmode']
-
-print('DEBUG =', DEBUG)
-print('SECRET_KEY =', SECRET_KEY)
-print('ALLOWED_HOSTS =', ALLOWED_HOSTS)
-print('DATABASE_URL =', DATABASES['default'])
