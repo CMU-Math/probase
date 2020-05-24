@@ -14,10 +14,10 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', '@hma)5tm@n)x8^t87u&&r=!0jjh1z@cde#9dhkdnr=^hu82ga%')
+SECRET_KEY = '@hma)5tm@n)x8^t87u&&r=!0jjh1z@cde#9dhkdnr=^hu82ga%' # this key is only used in local development
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', True) != 'False'
+DEBUG = os.environ.get('DEBUG') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -50,9 +50,17 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# https security
 if not DEBUG:
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_REFERRER_POLICY = 'same-origin'
+SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_PRELOAD = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
 
 ROOT_URLCONF = 'probase.urls'
 
@@ -89,12 +97,6 @@ WSGI_APPLICATION = 'probase.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
@@ -143,6 +145,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
+
+
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_URL = 'login'
@@ -153,8 +157,14 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 
 
-# must be at the end of the settings file
+# must be at the end of the settings file (except for the line after)
 # configures DATABASE_URL, ALLOWED_HOSTS, SECRET_KEY, and more
 django_heroku.settings(locals())
 
+# https://blog.usejournal.com/deploying-django-to-heroku-connecting-heroku-postgres-fcc960d290d1
 del DATABASES['default']['OPTIONS']['sslmode']
+
+print('DEBUG =', DEBUG)
+print('SECRET_KEY =', SECRET_KEY)
+print('ALLOWED_HOSTS =', ALLOWED_HOSTS)
+print('DATABASE_URL =', DATABASES['default'])
