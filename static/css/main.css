@@ -41,3 +41,9 @@
 .cardlink:hover {
     box-shadow: 0 0.3rem 0.6rem rgba(0,0,0,.1);
 }
+
+.stickydiv {
+    position: sticky;
+    top: 1.5rem;
+    transition: top 0.35s ease;
+}

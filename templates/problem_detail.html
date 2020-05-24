@@ -20,6 +20,7 @@
 
 <div class="row">
   <div class="col-lg-7 col-xl-6">
+    <div id="stickydiv" class="stickydiv">
 	<div class="card mb-4">
 	  <div class="card-body">
         {{ problem.problem_text|linebreaks }}
@@ -56,6 +57,7 @@
 	  </div>
 	</div>
     {% endif %}
+    </div>
   </div>
 
   <div class="col-lg-5 col-xl-6">
@@ -318,7 +320,7 @@ $(function() {
             $("#hiddenArea" + id).val(quills[id].container.querySelector('.ql-editor').innerHTML);
         })
     }
-});
+})
 
 function toggleForm(id) {
     var comment = document.getElementById("comment" + id);
@@ -331,6 +333,28 @@ function toggleForm(id) {
         editor.style.display = "none";
     }
 }
+
+function setStickyTop() {
+    var div = document.getElementById("stickydiv");
+    div.style.top = Math.min(remToPx(1.5), window.innerHeight - div.clientHeight - remToPx(1.5)) + "px";
+    console.log(div.style.top);
+}
+
+function remToPx(rem) {    
+    return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}
+
+$(".collapse").on("show.bs.collapse", function() {
+    this.style.display = "block";
+    setStickyTop();
+    this.style.display = "";
+})
+
+$(".collapse").on("hide.bs.collapse", function() {
+    this.style.height = "0";
+    setStickyTop();
+    this.style.height = "";
+})
 </script>
 
 {% endblock %}
