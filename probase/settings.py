@@ -14,10 +14,10 @@ if os.path.isfile(dotenv_file):
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@hma)5tm@n)x8^t87u&&r=!0jjh1z@cde#9dhkdnr=^hu82ga%'
+SECRET_KEY = os.environ.get('SECRET_KEY', '@hma)5tm@n)x8^t87u&&r=!0jjh1z@cde#9dhkdnr=^hu82ga%')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', True) != 'False'
 
 ALLOWED_HOSTS = []
 
@@ -49,11 +49,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-'''
+
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
-'''
+
 ROOT_URLCONF = 'probase.urls'
 
 TEMPLATES = [
