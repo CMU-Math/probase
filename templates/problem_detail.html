@@ -3,6 +3,7 @@
 {% load crispy_forms_tags %}
 {% load humanize %}
 {% load my_filters %}
+{% load static %}
 
 {% block content %}
 <div class="row mb-3">
@@ -128,12 +129,23 @@
 	  </div>
 	</div>
 
-    {% if problem.tag_list_text %}
     <div class="mb-4">
-      <h4>Tags</h4>
-      {{ problem.tag_list_text|escapedollars }}
+      <form autocomplete="off" method="POST">
+        {% csrf_token %}
+        <div class="row">
+          <div class="col autocomplete" id="tagContainer">
+            <div class="d-inline-block" id="inputContainer">
+              <input class="d-inline-block" id="myInput" type="text" placeholder="Add Tag" maxlength="30">
+              <div id="dropdown" class="autocomplete-items"></div>
+              <input type="hidden" name="tagText" value="" id="tagText">
+            </div>
+          </div>
+          <div class="col-auto">
+            <button type="submit" class="btn btn-info ml-auto" name="submit" value="tags">Save Tags</button>
+          </div>
+        </div>
+      </form>
     </div>
-    {% endif %}
 
     <h3>Comments</h3>
     {% if comment_list %}
@@ -356,5 +368,21 @@ $(".collapse").on("hide.bs.collapse", function() {
     this.style.height = "";
 })
 </script>
+
+<script>
+var initialTags = [
+    {% for tag in tag_list %}
+    "{{ tag.name }}",
+    {% endfor %}
+];
+
+var arr = [
+    {% for tag in all_tags %}
+    "{{ tag.name }}",
+    {% endfor %}
+];
+</script>
+
+<script src="{% static 'js/tags.js' %}"></script>
 
 {% endblock %}

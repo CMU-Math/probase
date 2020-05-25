@@ -158,6 +158,9 @@ LOGOUT_REDIRECT_URL = 'home'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+TAGGIT_CASE_INSENSITIVE = True
+
+
 
 
 # must be at the end of the settings file (except for the line after)

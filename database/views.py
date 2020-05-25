@@ -6,7 +6,6 @@ from django.core.exceptions import PermissionDenied
 from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector
 from .models import Problem, Rating, Comment
 from django_tex.shortcuts import render_to_pdf
-
 from taggit.models import Tag
 
 
@@ -70,6 +69,12 @@ def problem_detail(request, problem_id):
             comment = Comment.objects.get(pk=request.POST['commentID'])
             comment.text = request.POST['text']
             comment.save()
+        elif request.POST['submit'] == 'tags':
+            tags = request.POST['tagText'].split(",")
+            problem.tags.clear()
+            for tag in tags:
+                problem.tags.add(tag)
+            problem.save()
         else:
             assert False, "invalid submit"
 
@@ -77,6 +82,7 @@ def problem_detail(request, problem_id):
     diff_freq, diff_percent = problem.diff_distribution()
     qual_freq, qual_percent = problem.qual_distribution()
     comment_list = problem.comments.order_by('-creation_time')
+    print(problem.tags.all())
 
     return render(request, 'problem_detail.html', {
         'problem': problem,
@@ -88,6 +94,8 @@ def problem_detail(request, problem_id):
         'qual_freq': qual_freq,
         'qual_percent_color': [(qual_percent[i], Rating.COLORS[i]) for i in range(5)],
         'comment_list': comment_list,
+        'tag_list': problem.tags.all(),
+        'all_tags': Tag.objects.all(),
     })
 
 @login_required
@@ -100,7 +108,6 @@ def new_problem(request):
             'preview': True,
             'subject': request.POST['subject'],
             'title': request.POST['title'],
-            'tags': request.POST['tags'],
             'problem_text': request.POST['problem_text'],
             'answer': request.POST['answer'],
             'solution': request.POST['solution'],
@@ -116,7 +123,7 @@ def new_problem(request):
                 problem = form.save(commit=False)
                 problem.author = request.user
                 problem.save()
-                form.save_m2m()
+                problem.tags.add(problem.get_subject_display())
                 return redirect('problem_detail', problem_id=problem.id)
             else:
                 # if currently showing preview, continue to show preview
