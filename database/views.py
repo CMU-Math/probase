@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.http import JsonResponse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django import forms
@@ -69,12 +70,18 @@ def problem_detail(request, problem_id):
             comment = Comment.objects.get(pk=request.POST['commentID'])
             comment.text = request.POST['text']
             comment.save()
-        elif request.POST['submit'] == 'tags':
-            tags = request.POST['tagText'].split(",")
-            problem.tags.clear()
-            for tag in tags:
-                problem.tags.add(tag)
+        elif request.POST['submit'] == 'addTag':
+            problem.tags.add(request.POST['tag'])
             problem.save()
+            return JsonResponse({})
+        elif request.POST['submit'] == 'removeTag':
+            text = request.POST['tag']
+            problem.tags.remove(text)
+            problem.save()
+            if Problem.objects.filter(tags__name__in=[text]).count() == 0:
+                tag = Tag.objects.filter(name=text)
+                tag.delete()
+            return JsonResponse({})
         else:
             assert False, "invalid submit"
 
@@ -95,7 +102,7 @@ def problem_detail(request, problem_id):
         'qual_percent_color': [(qual_percent[i], Rating.COLORS[i]) for i in range(5)],
         'comment_list': comment_list,
         'tag_list': problem.tags.all(),
-        'all_tags': Tag.objects.all(),
+        'all_tags': Tag.objects.order_by('name'),
     })
 
 @login_required
@@ -123,7 +130,7 @@ def new_problem(request):
                 problem = form.save(commit=False)
                 problem.author = request.user
                 problem.save()
-                problem.tags.add(problem.get_subject_display())
+                problem.tags.add(problem.get_subject_display().lower())
                 return redirect('problem_detail', problem_id=problem.id)
             else:
                 # if currently showing preview, continue to show preview
