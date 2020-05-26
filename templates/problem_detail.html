@@ -123,7 +123,7 @@
 		</div>
 		<div class="row justify-content-center">
 	      <div class="col-auto">
-			<button type="button" class="btn btn-info" data-toggle="modal" data-target="#ratingModal">{% if current_rating %}Change Rating{% else %}Rate Problem{% endif %}</button>
+			<button type="button" class="btn btn-info" onclick="setChecked()" data-toggle="modal" data-target="#ratingModal">{% if current_rating %}Change Rating{% else %}Rate Problem{% endif %}</button>
 	      </div>
 		</div>
 	  </div>
@@ -232,36 +232,36 @@
 		<form method="post" id="ratingForm">
 		  {% csrf_token %}
 		  <p>How difficult is this problem?</p>
-		  <div class="container mb-3">
+		  <div class="container mb-3 difficulty">
 		    <div class="row flex-nowrap" style="overflow-x: auto;">
 			  <div class="col-auto px-0 ml-auto">
 			    <label class="pr-2">
-					<p class="mb-2">Easy - Mid AMC</p>
-				  <input type="radio" class="d-block mx-auto" value="1" {% if current_rating.difficulty == 1 %}checked{% endif %} name="diff" required>
+				  <p class="mb-2">Easy - Mid AMC</p>
+				  <input type="radio" class="d-block mx-auto" value="1" name="diff" required>
 			    </label>
 			  </div>
 			  <div class="col-auto px-0">
 			    <label class="px-2">
 				  <p class="mb-2">Easy AIME</p>
-				  <input type="radio" class="d-block mx-auto" value="2" {% if current_rating.difficulty == 2 %}checked{% endif %} name="diff">
+				  <input type="radio" class="d-block mx-auto" value="2" name="diff">
 			    </label>
 			  </div>
 			  <div class="col-auto px-0">
 			    <label class="px-2">
 				  <p class="mb-2">Mid AIME</p>
-				  <input type="radio" class="d-block mx-auto" value="3" {% if current_rating.difficulty == 3 %}checked{% endif %} name="diff">
+				  <input type="radio" class="d-block mx-auto" value="3" name="diff">
 			    </label>
 			  </div>
 			  <div class="col-auto px-0">
 			    <label class="px-2">
 				  <p class="mb-2">Hard AIME</p>
-				  <input type="radio" class="d-block mx-auto" value="4" {% if current_rating.difficulty == 4 %}checked{% endif %} name="diff">
+				  <input type="radio" class="d-block mx-auto" value="4" name="diff">
 			    </label>
 			  </div>
 			  <div class="col-auto px-0 mr-auto">
 			    <label class="pl-2">
 				  <p class="mb-2">USAMO</p>
-				  <input type="radio" class="d-block mx-auto" value="5" {% if current_rating.difficulty == 5 %}checked{% endif %} name="diff">
+				  <input type="radio" class="d-block mx-auto" value="5" name="diff">
 			    </label>
 			  </div>
 			</div>
@@ -269,7 +269,7 @@
 		  <hr/>
 
 		  <p>Should this be on the contest?</p>
-		  <div class="container">
+		  <div class="container quality">
 		    <div class="row flex-nowrap" style="overflow-x: auto;">
 			  <div class="col-auto px-0 ml-auto">
 			    <label class="pr-2">
@@ -303,6 +303,7 @@
 			  </div>
 			</div>
 		  </div>
+          <input type="reset" id="resetRatings" class="d-none">
 		</form>
       </div>
       <div class="modal-footer">
@@ -362,6 +363,26 @@ $(".collapse").on("hide.bs.collapse", function() {
     setStickyTop();
     this.style.height = "";
 })
+
+var currentDiff = "{{ current_rating.difficulty }}";
+var currentQual = "{{ current_rating.quality }}";
+
+function setChecked() {
+    if (currentDiff == "") {
+        $("#resetRatings").click();
+    } else {
+        diffInputs = document.querySelectorAll(".difficulty input");
+        for (let i = 0; i < diffInputs.length; i++) {
+            if (diffInputs[i].value == currentDiff)
+                diffInputs[i].checked = true;
+        }
+        qualInputs = document.querySelectorAll(".quality input");
+        for (let i = 0; i < qualInputs.length; i++) {
+            if (qualInputs[i].value == currentQual)
+                qualInputs[i].checked = true;
+        }
+    }
+}
 </script>
 
 <script>
