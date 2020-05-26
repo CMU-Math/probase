@@ -146,10 +146,15 @@
     {% if comment_list %}
       {% for comment in comment_list %}
         <div class="comment mb-3" id="comment{{ comment.id }}">
-          <div class="row">
-            <div class="col mb-2">
-              <span class="font-weight-bold">{{ comment.author }}</span> <span class="text-muted">{{ comment.creation_time|naturaltime }}</span>
-              {% if user == comment.author or user.is_staff %}<a href="#" onclick="toggleForm({{ comment.id }}); return false;" class="text-muted float-right">Edit</a>{% endif %}
+          <div class="row mb-2">
+            <div class="col">
+              <span class="font-weight-bold">{{ comment.author }}</span><br/>
+              <span class="text-muted" style="font-size: 0.875rem;">{{ comment.creation_time|naturaltime }}</span>
+            </div>
+            <div class="col-auto">
+              {% if user == comment.author or user.is_staff %}
+                <a href="#" onclick="toggleForm({{ comment.id }}); return false;" class="btn btn-light commentEdit">Edit</a>
+              {% endif %}
             </div>
           </div>
           {{ comment.text|safe }}
@@ -315,11 +320,28 @@
 </div>
 
 <script>
+var toolbarOptions = [
+    [{ 'size': ['small', false, 'large'] }],  // custom dropdown
+    ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+    [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'align': [] }],
+
+
+    ['blockquote', 'code-block', 'link'],
+
+    ['clean']                                         // remove formatting button
+];
+
 var quills = {
     {% for comment in comment_list %}
-    {{ comment.id }}: new Quill("#editor{{ comment.id }}", { theme: "snow" }),
+    {{ comment.id }}: new Quill("#editor{{ comment.id }}", {
+        modules: { toolbar: toolbarOptions },
+        theme: "snow"
+    }),
     {% endfor %}
-    "New": new Quill("#editorNew", { theme: "snow" }),
+    "New": new Quill("#editorNew", {
+        modules: { toolbar: toolbarOptions },
+        theme: "snow"
+    }),
 };
 
 $(function() {
