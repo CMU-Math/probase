@@ -17,7 +17,7 @@ def home(request):
         elif request.user.is_writer:
             return redirect('my_problems')
         else:
-            staff_list = get_user_model().objects.filter(is_active=True, is_staff=True)
+            staff_list = get_user_model().objects.filter(is_active=True, is_staff=True).order_by('pk')
             return render(request, 'home.html', {'staff_list': staff_list})
     return render(request, 'home.html')
 
