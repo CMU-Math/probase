@@ -32,10 +32,14 @@ def manage_users(request):
         user.is_writer = request.POST.get('is_writer') == 'on'
         user.is_solver = request.POST.get('is_solver') == 'on'
         user.is_staff = request.POST.get('is_staff') == 'on'
+        user.is_new = False
         user.save()
 
         if user == request.user and not user.is_staff:
             return redirect('home')
 
-    user_list = User.objects.all()
-    return render(request, 'manage_users.html', {'user_list': user_list})
+    user_list = User.objects.order_by('-pk')
+    return render(request, 'manage_users.html', {
+        'user_list': user_list,
+        'new_users': User.objects.filter(is_new=True).count(),
+    })

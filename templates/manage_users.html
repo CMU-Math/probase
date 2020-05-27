@@ -3,11 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<div class="accordion" id="accordion">
+<div class="accordion mb-5" id="accordion">
   {% for u in user_list %}
     <div class="card">
       <div class="card-header" style="transform: rotate(0);">
 		<a href="#collapse{{ u.id }}" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">{{ u }}</a>
+        {% if u.is_new %}<span class="badge badge-success">New</span>{% endif %}
       </div>
 	  <div id="collapse{{ u.id }}" class="collapse" data-parent="#accordion">
 		<div class="card-body">
@@ -102,9 +103,10 @@ function enableButton(id) {
 }
 
 $(document).ready(function() {
-  for (var id of Object.keys(context)) {
-	enableButton(id);
-  }
+    $('[data-toggle="tooltip"]').tooltip()
+    for (var id of Object.keys(context)) {
+        enableButton(id);
+    }
 })
 
 function submitOrModal(id) {

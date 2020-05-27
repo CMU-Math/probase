@@ -31,6 +31,7 @@ def all_problems(request):
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
         'empty_message': empty_message,
+        'new_users': get_user_model().objects.filter(is_new=True).count(),
     })
 
 @login_required
@@ -42,6 +43,7 @@ def my_problems(request):
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
         'empty_message': empty_message,
+        'new_users': get_user_model().objects.filter(is_new=True).count(),
     })
 
 @login_required
@@ -103,6 +105,7 @@ def problem_detail(request, problem_id):
         'comment_list': comment_list,
         'tag_list': problem.tags.all(),
         'all_tags': Tag.objects.order_by('name'),
+        'new_users': get_user_model().objects.filter(is_new=True).count(),
     })
 
 @login_required
@@ -142,7 +145,10 @@ def new_problem(request):
                     return render(request, 'make_problem.html', {'form': form})
     else:
         form = ProblemForm()
-        return render(request, 'make_problem.html', {'form': form })
+        return render(request, 'make_problem.html', {
+            'form': form,
+            'new_users': get_user_model().objects.filter(is_new=True).count(),
+        })
 
 @login_required
 def edit_problem(request, problem_id):
@@ -183,7 +189,10 @@ def edit_problem(request, problem_id):
                     return render(request, 'make_problem.html', {'form': form})
     else:
         form = ProblemForm(instance=problem)
-        return render(request, 'make_problem.html', {'form': form })
+        return render(request, 'make_problem.html', {
+            'form': form,
+            'new_users': get_user_model().objects.filter(is_new=True).count(),
+        })
 
 @login_required
 def create_test(request):
@@ -203,9 +212,9 @@ def create_test(request):
         problem_list = Problem.objects.all().order_by('-creation_time')
         empty_message = 'There are no problems in the database yet.'
 
-        context = {
+        return render(request, 'create_test.html', {
             'filter': 0,
             'form': ProblemSelect(problems=problem_list),
             'empty_message': empty_message,
-        }
-        return render(request, 'create_test.html', context)
+            'new_users': get_user_model().objects.filter(is_new=True).count(),
+        })
