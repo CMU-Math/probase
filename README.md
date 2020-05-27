@@ -14,7 +14,7 @@
 
 ### Making user accounts
 1. First, create a super user account: `python manage.py createsuperuser`. You can enter any name, email, and password.
-2. Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) again, and you should be redicted to the 'All Problems' page. There won't be any problems yet, but you can create one with the 'New Problem' button.
+2. Visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/) again, and log in with the account you just created. You should be redicted to the 'All Problems' page. There won't be any problems yet, but you can create one with the 'New Problem' button.
 3. The super user account you created in step 1 has all permissions enabled: problem writer, testsolver, and staff. If you create a new account normally (click 'log out', then 'sign up' in the top right), it will have no permissions enabled by default. You have to go to the [Manage Users](http://127.0.0.1:8000/manage-users/) page to change their permissions.
 
 ### Tutorials

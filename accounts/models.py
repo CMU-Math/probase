@@ -62,3 +62,6 @@ class User(AbstractUser):
 
     def num_comments(self):
         return self.comments.all().count()
+
+    def new_users(self):
+        return User.objects.filter(is_active=True, is_new=True).count()
