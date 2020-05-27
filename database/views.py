@@ -88,7 +88,7 @@ def problem_detail(request, problem_id):
     current_rating = problem.ratings.filter(user=request.user).first()
     diff_freq, diff_percent = problem.diff_distribution()
     qual_freq, qual_percent = problem.qual_distribution()
-    comment_list = problem.comments.order_by('-creation_time')
+    comment_list = problem.comments.order_by('creation_time')
     print(problem.tags.all())
 
     return render(request, 'problem_detail.html', {
