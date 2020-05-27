@@ -1,5 +1,5 @@
 body {
-    background-color: #fafafa;
+    background-color: #f8f9fa;
 }
 
 /* Django crispy forms: hide asterisk for required fields because all fields are required */

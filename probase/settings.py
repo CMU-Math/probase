@@ -1,14 +1,9 @@
 import os
 import django_heroku
-import dotenv
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-dotenv_file = os.path.join(BASE_DIR, ".env")
-if os.path.isfile(dotenv_file):
-    dotenv.load_dotenv(dotenv_file)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -101,7 +96,7 @@ WSGI_APPLICATION = 'probase.wsgi.application'
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
 DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+DATABASES['default'] = dj_database_url.config(default='sqlite:///db.sqlite3', conn_max_age=600)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -163,9 +158,6 @@ TAGGIT_CASE_INSENSITIVE = True
 
 
 
-# must be at the end of the settings file (except for the line after)
+# must be at the end of the settings file
 # configures DATABASE_URL, SECRET_KEY, static files, and more
 django_heroku.settings(locals(), allowed_hosts=False)
-
-# https://blog.usejournal.com/deploying-django-to-heroku-connecting-heroku-postgres-fcc960d290d1
-del DATABASES['default']['OPTIONS']['sslmode']
