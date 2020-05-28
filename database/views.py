@@ -153,6 +153,7 @@ def edit_problem(request, problem_id):
         print(request.POST)
         data = {
             'preview': True,
+            'subject': request.POST['subject'],
             'title': request.POST['title'],
             'problem_text': request.POST['problem_text'],
             'answer': request.POST['answer'],
