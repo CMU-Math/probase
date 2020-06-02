@@ -162,8 +162,6 @@ def edit_problem(request, problem_id):
         if request.POST.get('delete'):
             problem.delete()
             return redirect('home')
-        if request.POST.get('cancel'):
-            return redirect('problem_detail', problem_id=problem_id)
         elif request.POST.get('preview'):
             form = ProblemForm(initial=data)
             data['form'] = form
@@ -173,6 +171,7 @@ def edit_problem(request, problem_id):
             form = ProblemForm(request.POST, instance=problem)
             if form.is_valid():
                 form.save()
+                problem.tags.add(problem.get_subject_display().lower())
                 return redirect('problem_detail', problem_id=problem_id)
             else:
                 # if currently showing preview, continue to show preview

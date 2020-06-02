@@ -157,3 +157,15 @@ body {
     background-color: transparent;
     color: #6c757d;
 }
+
+.stretched-link::after {
+    z-index: 0;
+}
+
+mjx-container {
+    overflow-x: auto;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+    padding-bottom: 4px !important;
+}

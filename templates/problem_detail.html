@@ -23,7 +23,7 @@
   <div class="col-lg-7 col-xl-6">
     <div id="stickydiv" class="stickydiv">
 	<div class="card mb-4">
-	  <div class="card-body">
+	  <div class="card-body hscroll">
         {{ problem.problem_text|linebreaks }}
 		<p class="card-text text-muted text-right">Proposed by {{ problem.author }}</p>
 	  </div>
@@ -36,7 +36,7 @@
 			<h5 class="mb-0"><a href="#collapseAnswer" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">Answer</a></h5>
 		</div>
 		<div id="collapseAnswer" class="collapse" data-parent="#accordionAnswer">
-		  <div class="card-body">
+		  <div class="card-body hscroll">
 			{{ problem.answer|linebreaks }}
 		  </div>
 		</div>
@@ -51,7 +51,7 @@
           <h5 class="mb-0"><a href="#collapseSolution" class="stretched-link text-reset text-decoration-none collapsed" data-toggle="collapse">Solution</a></h5>
 		</div>
 		<div id="collapseSolution" class="collapse" data-parent="#accordionSolution">
-		  <div class="card-body">
+		  <div class="card-body hscroll">
 			{{ problem.solution|linebreaks }}
 		  </div>
 		</div>
@@ -236,7 +236,7 @@
 		  {% csrf_token %}
 		  <p>How difficult is this problem?</p>
 		  <div class="container mb-3 difficulty">
-		    <div class="row flex-nowrap" style="overflow-x: auto;">
+		    <div class="row flex-nowrap hscroll">
 			  <div class="col-auto px-0 ml-auto">
 			    <label class="pr-2">
 				  <p class="mb-2">Easy - Mid AMC</p>
