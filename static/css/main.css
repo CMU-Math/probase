@@ -26,6 +26,10 @@ body {
     margin-bottom: 0;
 }
 
+.card-body > p:last-child > mjx-container {
+    margin-bottom: 0;
+}
+
 .rating-bar-container {
     border-radius: 30px;
     height: 16px;
