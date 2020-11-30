@@ -9,9 +9,9 @@ class Problem(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="problems")
     creation_time = models.DateTimeField(auto_now_add=True)
 
-    problem_text = models.CharField(max_length=1000) # problem (in latex)
-    answer = models.CharField(max_length=100, blank=True) # answer (in latex)
-    solution = models.CharField(max_length=2000, blank=True) # solution (in latex)
+    problem_text = models.CharField(max_length=10000) # problem (in latex)
+    answer = models.CharField(max_length=1000, blank=True) # answer (in latex)
+    solution = models.CharField(max_length=10000, blank=True) # solution (in latex)
 
     update_time = models.DateTimeField(blank=True, null=True) # time of last update
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True, related_name="+") # user who last updated it
