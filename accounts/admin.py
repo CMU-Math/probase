@@ -22,6 +22,7 @@ class CustomUserAdmin(UserAdmin):
         'is_writer',
         'is_solver',
         'is_staff',
+        'is_new',
         'is_active',
     )
     list_filter = (
