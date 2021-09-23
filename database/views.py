@@ -26,7 +26,7 @@ def home(request):
 def all_problems(request):
     if not request.user.is_solver and not request.user.is_staff:
         raise PermissionDenied
-    problem_list = Problem.objects.order_by('-creation_time')
+    problem_list = Problem.objects.filter(is_archived=False).order_by('-creation_time')
     empty_message = 'There are no problems in the database yet.'
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
@@ -37,7 +37,7 @@ def all_problems(request):
 def my_problems(request):
     if not request.user.is_writer and not request.user.is_staff:
         raise PermissionDenied
-    problem_list = Problem.objects.filter(author=request.user).order_by('-creation_time')
+    problem_list = Problem.objects.filter(author=request.user, is_archived=False).order_by('-creation_time')
     empty_message = "You haven't submitted any problems yet."
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
