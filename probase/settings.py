@@ -17,7 +17,10 @@ DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 if DEBUG:
     ALLOWED_HOSTS = []
 else:
-    ALLOWED_HOSTS = ['cmimc-probase.herokuapp.com']
+    ALLOWED_HOSTS = [
+        'cmimc-probase.herokuapp.com',
+        'probase-staging.herokuapp.com',
+    ]
 
 
 # Application definition
