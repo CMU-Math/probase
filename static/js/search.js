@@ -32,7 +32,6 @@ window.onload = () => {
 
 	getProblems().map(e => e.dataset.author)
 		.filter((e, i, arr) => arr.indexOf(e) === i)
-		.concat(["awer", "woeijr"])
 		.forEach(author => {
 			const opt = document.createElement("option");
 			opt.value = author;
