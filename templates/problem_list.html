@@ -25,9 +25,17 @@
   {% endif %}
 </div>
 
+<script src="/static/js/search.js"></script>
+
 <div class="row">
   <div class="col-md-4 mb-3">
-    Search, filter, and sort: coming soon!
+		<label for=filterText>Text</label>
+		<input class="textinput textInput form-control" id=filterText />
+		<br/>
+		<label for=filterAuthor>Author</label>
+		<select class="textinput textInput form-control" id=filterAuthor multiple>
+			<option value="">No Filter</option>
+		</select>
   </div>
   <div class="col-md-8">
     <div class="card-deck-wrapper">
