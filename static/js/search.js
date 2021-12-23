@@ -10,7 +10,7 @@ window.onload = () => {
 		const matches = getProblems()
 			.filter(e => {
 				if (textFilter !== "") {
-					return e.innerText.includes(textFilter);
+					return e.innerText.toLowerCase().includes(textFilter);
 				}
 				return true;
 			})
@@ -26,7 +26,7 @@ window.onload = () => {
 		});
 	}
 	$("#filterText")[0].oninput = function () {
-		textFilter = this.value;
+		textFilter = this.value.toLowerCase();
 		applyFilter();
 	}
 
