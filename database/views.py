@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.exceptions import PermissionDenied
-from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector
+from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector, ProblemFilter
 from .models import Problem, Rating, Comment
 from django_tex.shortcuts import render_to_pdf
 from taggit.models import Tag
@@ -22,15 +22,42 @@ def home(request):
     return render(request, 'home.html')
 
 
+# @login_required
+# def all_problems(request):
+#     if not request.user.is_solver and not request.user.is_staff:
+#         raise PermissionDenied
+#     problem_list = Problem.objects.filter(is_archived=False).order_by('-creation_time')
+#     empty_message = 'There are no problems in the database yet.'
+#     return render(request, 'problem_list.html', {
+#         'problem_list': problem_list,
+#         'empty_message': empty_message,
+#     })
+
+def filtercat(tag_list, problem_list, request):
+    request_list = request.GET.getlist('tag_filter')
+    if "" in request_list:
+        return problem_list
+    # result_list = Model.objects.none()
+    # for request_tag in request_list:
+    #     result_list = result_list | problem_list.filter()
+    return problem_list.filter(tags__name__in=request_list).distinct()
+
+
 @login_required
 def all_problems(request):
     if not request.user.is_solver and not request.user.is_staff:
         raise PermissionDenied
     problem_list = Problem.objects.filter(is_archived=False).order_by('-creation_time')
     empty_message = 'There are no problems in the database yet.'
+    total_tag_list = Tag.objects.all()
+    # print(tag_list.first())
+    # tag_list = Problem.objects.values_list('tags', flat=True).distinct()
+    problem_list = filtercat(total_tag_list, problem_list, request)
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
         'empty_message': empty_message,
+        'tags': total_tag_list,
+        'form':ProblemFilter
     })
 
 @login_required
