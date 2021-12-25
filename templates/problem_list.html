@@ -32,21 +32,25 @@
 		<label for=filterText>Search</label>
 		<input class="textinput textInput form-control" id=filterText />
 		<br/>
+    <div class = "row">
+    <div class = "col-sm-8">
+      <h4>Category</h4>
+    </div>
+    <div class = "col-sm-4">
+      <button type="button" class="btn-sm btn-outline-secondary" id ="ClearTags" >Clear All</button>
+    </div>
+  </div>
+    {% for tag in tags%}
     <form method="get">
-      {% csrf_token %}
-      <div class="form-group">
-        <label for="id_subject">Category</label>
-        <select class="textinput textInput form-control" name ="tag_filter" onchange="submit()" id=filterTags multiple>
-          <option value="">All Tags</option>
-          {% for tag in tags%}
-          <option value={{tag}}>{{tag}}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <!-- <button type="submit" class="btn btn-success">Filter</button> -->
-    </form>
+    <div class="form-check">
+      <label class="form-check-label" for="flexCheckChecked"><input class="form-check-input tag_filter" type="checkbox" name ="check-{{tag}}" value={{tag}} id="tagchecker-{{tag}}" checked>
+        {{tag}}
+      </label>
+    </div>
+    {% endfor %}
+    <form>
     <br/>
-		<label for=filterAuthor>Filter By Author</label>
+		<label for=filterAuthor><h4>Filter By Author</h4></label>
 		<select class="textinput textInput form-control" id=filterAuthor multiple>
 			<option value="">All authors</option>
 		</select>

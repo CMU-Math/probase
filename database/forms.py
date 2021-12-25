@@ -93,7 +93,7 @@ class ProblemSelect(forms.Form):
             ),
         )
 
-class ProblemFilter(ModelForm):
-    class Meta:
-        model = Problem
-        fields = []
+# class ProblemFilter(ModelForm):
+#     class Meta:
+#         model = Problem
+#         fields = []

@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django import forms
 from django.core.exceptions import PermissionDenied
-from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector, ProblemFilter
+from .forms import ProblemForm, RatingForm, ProblemSelect, ProblemSelector
 from .models import Problem, Rating, Comment
 from django_tex.shortcuts import render_to_pdf
 from taggit.models import Tag
@@ -34,13 +34,18 @@ def home(request):
 #     })
 
 def filtercat(tag_list, problem_list, request):
-    request_list = request.GET.getlist('tag_filter')
-    if "" in request_list:
-        return problem_list
-    # result_list = Model.objects.none()
-    # for request_tag in request_list:
-    #     result_list = result_list | problem_list.filter()
-    return problem_list.filter(tags__name__in=request_list).distinct()
+    for tag in tag_list:
+        r = request.GET.get('check-' + str(tag))
+        print('check-' + str(tag))
+        print(r)
+    # request_list = request.GET.getlist('tag_filter')
+    # if "" in request_list:
+    #     return problem_list
+    # # result_list = Model.objects.none()
+    # # for request_tag in request_list:
+    # #     result_list = result_list | problem_list.filter()
+    # return problem_list.filter(tags__name__in=request_list).distinct()
+    return problem_list
 
 
 @login_required
@@ -56,8 +61,7 @@ def all_problems(request):
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
         'empty_message': empty_message,
-        'tags': total_tag_list,
-        'form':ProblemFilter
+        'tags': total_tag_list
     })
 
 @login_required

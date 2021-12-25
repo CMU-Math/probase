@@ -1,6 +1,6 @@
 {% load my_filters %}
 
-<div class="card cardlink mb-4" data-type="problem" data-author="{{ problem.author }}">
+<div class="card cardlink mb-4" data-type="problem" data-author="{{ problem.author }}" data-tag="{{problem.tags.names}}">
   <div class="card-body">
     <h4 class="card-title">
       <a href="{% url 'problem_detail' problem.id %}" class="stretched-link text-reset text-decoration-none">
