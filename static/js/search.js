@@ -17,7 +17,6 @@ window.onload = () => {
 				tagList.push(tagEleList[i].value);
 			}
 		}
-		console.log(tagList);
 		return tagList;
 	}
 
@@ -48,9 +47,7 @@ window.onload = () => {
 			})
 			.filter(e => {
 				if (tagFilter.length !== 0) { 
-					console.log((e.dataset.tag));
 					var curTags = extractTags(e.dataset.tag);
-					console.log(curTags.length);
 					for(var i = 0; i < curTags.length; i ++){
 						if(tagFilter.includes(curTags[i])){
 							return true;
@@ -102,7 +99,7 @@ window.onload = () => {
 	// Adds Handler for Clear Tags Button
 	$("#ClearTags")[0].onclick = function () {
 		for(var i = 0; i < tagEleList.length; i++){
-			tagEleList[i].checked = false;
+			tagEleList[i].checked = true;
 		}
 	};
 	

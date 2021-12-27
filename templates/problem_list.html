@@ -37,13 +37,14 @@
       <h4>Category</h4>
     </div>
     <div class = "col-sm-4">
-      <button type="button" class="btn-sm btn-outline-secondary" id ="ClearTags" >Clear All</button>
+      <button type="button" class="btn-sm btn-outline-secondary" id ="ClearTags" >Reset</button>
     </div>
   </div>
     {% for tag in tags%}
     <form method="get">
     <div class="form-check">
-      <label class="form-check-label" for="flexCheckChecked"><input class="form-check-input tag_filter" type="checkbox" name ="check-{{tag}}" value={{tag}} id="tagchecker-{{tag}}" checked>
+      <input class="form-check-input tag_filter" type="checkbox" name ="check-{{tag}}" value={{tag}} id="tagchecker-{{tag}}" checked>
+      <label class="form-check-label" for="tagchecker-{{tag}}">
         {{tag}}
       </label>
     </div>
