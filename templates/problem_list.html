@@ -40,8 +40,14 @@
       <button type="button" class="btn-sm btn-outline-secondary" id ="ClearTags" >Reset</button>
     </div>
   </div>
-    {% for tag in tags%}
+    <div class="form-check" style="display:none;">
+      <input class="form-check-input" type="checkbox" name ="check" value="" id="all-tags"  checked>
+      <label class="form-check-label" for="all-tags">
+        All Tags
+      </label>
+    </div>
     <form method="get">
+    {% for tag in tags%}
     <div class="form-check">
       <input class="form-check-input tag_filter" type="checkbox" name ="check-{{tag}}" value={{tag}} id="tagchecker-{{tag}}" checked>
       <label class="form-check-label" for="tagchecker-{{tag}}">

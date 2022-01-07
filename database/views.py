@@ -21,30 +21,9 @@ def home(request):
             return render(request, 'home.html', {'staff_list': staff_list})
     return render(request, 'home.html')
 
-
-# @login_required
-# def all_problems(request):
-#     if not request.user.is_solver and not request.user.is_staff:
-#         raise PermissionDenied
-#     problem_list = Problem.objects.filter(is_archived=False).order_by('-creation_time')
-#     empty_message = 'There are no problems in the database yet.'
-#     return render(request, 'problem_list.html', {
-#         'problem_list': problem_list,
-#         'empty_message': empty_message,
-#     })
-
 def filtercat(tag_list, problem_list, request):
     for tag in tag_list:
         r = request.GET.get('check-' + str(tag))
-        print('check-' + str(tag))
-        print(r)
-    # request_list = request.GET.getlist('tag_filter')
-    # if "" in request_list:
-    #     return problem_list
-    # # result_list = Model.objects.none()
-    # # for request_tag in request_list:
-    # #     result_list = result_list | problem_list.filter()
-    # return problem_list.filter(tags__name__in=request_list).distinct()
     return problem_list
 
 
@@ -55,8 +34,6 @@ def all_problems(request):
     problem_list = Problem.objects.filter(is_archived=False).order_by('-creation_time')
     empty_message = 'There are no problems in the database yet.'
     total_tag_list = Tag.objects.all()
-    # print(tag_list.first())
-    # tag_list = Problem.objects.values_list('tags', flat=True).distinct()
     problem_list = filtercat(total_tag_list, problem_list, request)
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,

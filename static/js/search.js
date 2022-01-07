@@ -9,6 +9,8 @@ window.onload = () => {
 
 	const tagEleList = $('.tag_filter');
 
+	const alltagsEle = $('#all-tags')[0];
+
 	// Retrieve list of tags for filter
 	const getTagList = () => {
 		let tagList = [];
@@ -47,6 +49,7 @@ window.onload = () => {
 			})
 			.filter(e => {
 				if (tagFilter.length !== 0) { 
+					if(alltagsEle.checked){return true;}
 					var curTags = extractTags(e.dataset.tag);
 					for(var i = 0; i < curTags.length; i ++){
 						if(tagFilter.includes(curTags[i])){
@@ -91,6 +94,7 @@ window.onload = () => {
 	// Handlers for tag checkboxes
 	for(var i = 0; i < tagEleList.length; i++){
 		tagEleList[i].onchange = function () {
+			alltagsEle.checked = false;
 			tagFilter = getTagList();
 			applyFilter();
 		};
@@ -99,8 +103,11 @@ window.onload = () => {
 	// Adds Handler for Clear Tags Button
 	$("#ClearTags")[0].onclick = function () {
 		for(var i = 0; i < tagEleList.length; i++){
-			tagEleList[i].checked = true;
+			tagEleList[i].checked = false;
+			
 		}
+		alltagsEle.checked = true;
+		applyFilter();
 	};
 	
 
