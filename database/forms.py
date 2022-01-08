@@ -92,3 +92,8 @@ class ProblemSelect(forms.Form):
                 Submit('to_pdf', 'To PDF', css_class='mx-1'),
             ),
         )
+
+# class ProblemFilter(ModelForm):
+#     class Meta:
+#         model = Problem
+#         fields = []

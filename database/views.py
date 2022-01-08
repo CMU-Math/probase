@@ -21,6 +21,11 @@ def home(request):
             return render(request, 'home.html', {'staff_list': staff_list})
     return render(request, 'home.html')
 
+def filtercat(tag_list, problem_list, request):
+    for tag in tag_list:
+        r = request.GET.get('check-' + str(tag))
+    return problem_list
+
 
 @login_required
 def all_problems(request):
@@ -28,9 +33,12 @@ def all_problems(request):
         raise PermissionDenied
     problem_list = Problem.objects.filter(is_archived=False).order_by('-creation_time')
     empty_message = 'There are no problems in the database yet.'
+    total_tag_list = Tag.objects.all()
+    problem_list = filtercat(total_tag_list, problem_list, request)
     return render(request, 'problem_list.html', {
         'problem_list': problem_list,
         'empty_message': empty_message,
+        'tags': total_tag_list
     })
 
 @login_required
