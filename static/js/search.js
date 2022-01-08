@@ -11,6 +11,14 @@ window.onload = () => {
 
 	const alltagsEle = $('#all-tags')[0];
 
+	const resetTags = () => {
+		for(var i = 0; i < tagEleList.length; i++){
+			tagEleList[i].checked = false;
+		}
+		alltagsEle.checked = true;
+		applyFilter();
+	}
+
 	// Retrieve list of tags for filter
 	const getTagList = () => {
 		let tagList = [];
@@ -34,6 +42,7 @@ window.onload = () => {
 
 	// Big Filter Function
 	const applyFilter = () => {
+		console.log("Hello");
 		const matches = getProblems()
 			.filter(e => {
 				if (textFilter !== "") {
@@ -102,12 +111,7 @@ window.onload = () => {
 
 	// Adds Handler for Clear Tags Button
 	$("#ClearTags")[0].onclick = function () {
-		for(var i = 0; i < tagEleList.length; i++){
-			tagEleList[i].checked = false;
-			
-		}
-		alltagsEle.checked = true;
-		applyFilter();
+		resetTags();
 	};
 	
 

@@ -49,7 +49,7 @@
     <form method="get">
     {% for tag in tags%}
     <div class="form-check">
-      <input class="form-check-input tag_filter" type="checkbox" name ="check-{{tag}}" value={{tag}} id="tagchecker-{{tag}}" checked>
+      <input class="form-check-input tag_filter" type="checkbox" name ="check-{{tag}}" value="{{tag}}" id="tagchecker-{{tag}}">
       <label class="form-check-label" for="tagchecker-{{tag}}">
         {{tag}}
       </label>

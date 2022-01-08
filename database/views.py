@@ -26,7 +26,6 @@ def filtercat(tag_list, problem_list, request):
         r = request.GET.get('check-' + str(tag))
     return problem_list
 
-
 @login_required
 def all_problems(request):
     if not request.user.is_solver and not request.user.is_staff:
@@ -97,7 +96,6 @@ def problem_detail(request, problem_id):
     diff_freq, diff_percent = problem.diff_distribution()
     qual_freq, qual_percent = problem.qual_distribution()
     comment_list = problem.comments.order_by('creation_time')
-    print(problem.tags.all())
 
     return render(request, 'problem_detail.html', {
         'problem': problem,
