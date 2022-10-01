@@ -1,5 +1,5 @@
 import os
-import django_heroku
+#import django_heroku
 import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -164,4 +164,4 @@ TAGGIT_CASE_INSENSITIVE = True
 
 # must be at the end of the settings file
 # configures DATABASE_URL, SECRET_KEY, static files, and more
-django_heroku.settings(locals(), allowed_hosts=False)
+#django_heroku.settings(locals(), allowed_hosts=False)
